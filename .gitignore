@@ -3,6 +3,7 @@
 # User-specific files
 appsettings.json
 appsettings.*.json
+ERD.vuerd.json
 obj/
 bin/
 
