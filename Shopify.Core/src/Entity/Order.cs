@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace Shopify.Core.src.Entity;
 
-public class Order
+public class Order : BaseEntity
 {
   public required Guid CustomerId { get; set; }
 

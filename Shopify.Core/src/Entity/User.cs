@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace Shopify.Core.src.Entity;
 
-public class User
+public class User : BaseEntity
 {
   public Role Role { get; set; } = Role.Customer;
   public required string FirstName { get; set; }

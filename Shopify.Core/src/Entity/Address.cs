@@ -1,6 +1,6 @@
 namespace Shopify.Core.src.Entity;
 
-public class Address
+public class Address : BaseEntity
 {
   public required string Street { get; set; }
   public required string PostCode { get; set; }

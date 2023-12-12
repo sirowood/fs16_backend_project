@@ -1,6 +1,6 @@
 namespace Shopify.Core.src.Entity;
 
-public class Image
+public class Image : BaseEntity
 {
   public required string Format { get; set; }
   public required string Name { get; set; }
