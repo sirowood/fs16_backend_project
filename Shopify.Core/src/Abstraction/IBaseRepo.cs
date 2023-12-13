@@ -7,7 +7,7 @@ public interface IBaseRepo<T> where T : BaseEntity
 {
   IEnumerable<T> GetAll(GetAllOptions options);
   T GetById(Guid id);
-  T CreateOne(T newObject);
+  T CreateOne(T createObject);
   T UpdateOne(T updateObject);
   bool DeleteOne(Guid id);
 }
