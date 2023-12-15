@@ -20,8 +20,9 @@ public class UserService : IUserService
 
   public UserReadDTO CreateOne(UserCreateDTO createDTO)
   {
-    var result = _userRepo.CreateOne(_mapper.Map<UserCreateDTO, User>(createDTO));
-    return _mapper.Map<User, UserReadDTO>(result);
+    var user = _mapper.Map<UserCreateDTO, User>(createDTO);
+    var createdUser = _userRepo.CreateOne(user);
+    return _mapper.Map<User, UserReadDTO>(createdUser);
   }
 
   public bool DeleteOne(Guid id)

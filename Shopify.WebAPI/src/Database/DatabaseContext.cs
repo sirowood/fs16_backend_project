@@ -16,7 +16,7 @@ public class DatabaseContext : DbContext
 
   protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
   {
-    var dataSourceBuilder = new NpgsqlDataSourceBuilder("Host=localhost;Port=5434;Database=shopify;Username=admin;Password=admin");
+    var dataSourceBuilder = new NpgsqlDataSourceBuilder(_config.GetConnectionString("DatabaseURL"));
     dataSourceBuilder.MapEnum<Role>();
     var dataSource = dataSourceBuilder.Build();
 
@@ -29,10 +29,24 @@ public class DatabaseContext : DbContext
 
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
-    modelBuilder.HasPostgresEnum<Role>();
-    modelBuilder.Entity<User>(entity => entity.Property(e => e.Role).HasColumnType("role"));
+    modelBuilder
+      .HasPostgresEnum<Role>();
 
-    modelBuilder.Entity<Address>().HasOne<User>().WithMany().HasForeignKey(a => a.UserId).OnDelete(DeleteBehavior.Cascade);
+    modelBuilder.Entity<User>(entity =>
+    {
+      entity.Property(e => e.Role)
+      .HasColumnType("role");
+
+      entity.HasIndex(e => e.Email)
+      .IsUnique();
+    });
+
+    modelBuilder
+      .Entity<Address>()
+      .HasOne<User>()
+      .WithMany()
+      .HasForeignKey(a => a.UserId)
+      .OnDelete(DeleteBehavior.Cascade);
 
     base.OnModelCreating(modelBuilder);
   }
