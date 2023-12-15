@@ -8,7 +8,7 @@ public class UserReadDTO : BaseEntity
   public required string FirstName { get; set; }
   public required string LastName { get; set; }
   public required string Email { get; set; }
-  public required IEnumerable<AddressReadDTO> Addresses { get; set; }
+  public required IEnumerable<AddressReadDTO> Addresses { get; set; } = new List<AddressReadDTO>();
 }
 
 public class UserCreateDTO

@@ -45,7 +45,8 @@ public class UserService : IUserService
 
   public IEnumerable<UserReadDTO> GetAll(GetAllOptions options)
   {
-    throw new NotImplementedException();
+    var users = _userRepo.GetAll(options);
+    return _mapper.Map<IEnumerable<User>, IEnumerable<UserReadDTO>>(users);
   }
 
   public UserReadDTO GetByEmail(string email)

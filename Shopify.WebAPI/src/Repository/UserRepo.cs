@@ -63,7 +63,9 @@ public class UserRepo : IUserRepo
 
   public IEnumerable<User> GetAll(GetAllOptions options)
   {
-    throw new NotImplementedException();
+    return _users
+      .Skip(options.Offset)
+      .Take(options.Limit);
   }
 
   public User? GetByEmail(string email)

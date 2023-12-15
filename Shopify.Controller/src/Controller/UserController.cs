@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Shopify.Core.src.Shared;
 using Shopify.Service.src.Abstraction;
 using Shopify.Service.src.DTO;
 
@@ -32,5 +33,13 @@ public class UserController : ControllerBase
   {
     Console.WriteLine(loginDTO.ToString());
     return _userService.Login(loginDTO);
+  }
+
+  [Authorize(Roles = "Admin")]
+  [HttpGet()]
+  [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+  public ActionResult<IEnumerable<UserReadDTO>> GetAll([FromQuery] GetAllOptions options)
+  {
+    return Ok(_userService.GetAll(options));
   }
 }
