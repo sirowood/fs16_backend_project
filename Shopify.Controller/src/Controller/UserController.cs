@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Shopify.Service.src.Abstraction;
 using Shopify.Service.src.DTO;
@@ -18,6 +19,8 @@ public class UserController : ControllerBase
 
   [AllowAnonymous]
   [HttpPost()]
+  [ProducesResponseType(StatusCodes.Status201Created)]
+  [ProducesResponseType(StatusCodes.Status400BadRequest)]
   public ActionResult<UserReadDTO> CreateOne([FromBody] UserCreateDTO createDTO)
   {
     var createdUser = _userService.CreateOne(createDTO);

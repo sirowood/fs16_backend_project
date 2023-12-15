@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+
 using Shopify.Core.src.Abstraction;
 using Shopify.Core.src.Entity;
 using Shopify.Core.src.Shared;
@@ -35,9 +36,9 @@ public class UserRepo : IUserRepo
     throw new NotImplementedException();
   }
 
-  public User GetByEmail(string email)
+  public User? GetByEmail(string email)
   {
-    throw new NotImplementedException();
+    return _users.FirstOrDefault(u => u.Email == email);
   }
 
   public User GetById(Guid id)

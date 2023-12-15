@@ -4,6 +4,7 @@ using Shopify.Core.src.Abstraction;
 using Shopify.Service.src.Abstraction;
 using Shopify.Service.src.Service;
 using Shopify.Service.src.Shared;
+using Shopify.WebAPI.src.Middleware;
 using Shopify.WebAPI.src.Database;
 using Shopify.WebAPI.src.Repository;
 
@@ -20,11 +21,15 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepo, UserRepo>();
 
+builder.Services.AddTransient<ExceptionHandlerMiddleware>();
+
 builder.Services.AddAutoMapper(typeof(MapperProfile).Assembly);
 
 builder.Services.AddDbContext<DatabaseContext>(options => options.UseNpgsql());
 
 var app = builder.Build();
+
+app.UseMiddleware<ExceptionHandlerMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

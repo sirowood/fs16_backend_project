@@ -4,6 +4,7 @@ using Shopify.Core.src.Entity;
 using Shopify.Core.src.Shared;
 using Shopify.Service.src.Abstraction;
 using Shopify.Service.src.DTO;
+using Shopify.Service.src.Shared;
 
 namespace Shopify.Service.src.Service;
 
@@ -20,6 +21,11 @@ public class UserService : IUserService
 
   public UserReadDTO CreateOne(UserCreateDTO createDTO)
   {
+    if (_userRepo.GetByEmail(createDTO.Email) is not null)
+    {
+      throw CustomException.EmailIsNotAvailable();
+    }
+
     var user = _mapper.Map<UserCreateDTO, User>(createDTO);
     var createdUser = _userRepo.CreateOne(user);
     return _mapper.Map<User, UserReadDTO>(createdUser);
@@ -37,7 +43,10 @@ public class UserService : IUserService
 
   public UserReadDTO GetByEmail(string email)
   {
-    throw new NotImplementedException();
+    var result = _userRepo.GetByEmail(email)
+      ?? throw CustomException.NotFound("No such user.");
+
+    return _mapper.Map<User, UserReadDTO>(result);
   }
 
   public UserReadDTO GetById(Guid id)
