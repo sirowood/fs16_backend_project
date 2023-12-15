@@ -7,6 +7,9 @@ using Shopify.Service.src.Shared;
 using Shopify.WebAPI.src.Middleware;
 using Shopify.WebAPI.src.Database;
 using Shopify.WebAPI.src.Repository;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,6 +30,24 @@ builder.Services.AddAutoMapper(typeof(MapperProfile).Assembly);
 
 builder.Services.AddDbContext<DatabaseContext>(options => options.UseNpgsql());
 
+builder
+  .Services
+  .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+  .AddJwtBearer(o =>
+  {
+    o.TokenValidationParameters = new TokenValidationParameters
+    {
+      ValidIssuer = builder.Configuration["Jwt:Issuer" ?? "Default Issuer"],
+      ValidAudience = builder.Configuration["Jwt:Audience" ?? "Default Audience"],
+      IssuerSigningKey = new SymmetricSecurityKey
+        (Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"] ?? "Default Key")),
+      ValidateIssuer = true,
+      ValidateAudience = true,
+      ValidateLifetime = true,
+      ValidateIssuerSigningKey = true
+    };
+  });
+
 var app = builder.Build();
 
 app.UseMiddleware<ExceptionHandlerMiddleware>();
@@ -34,11 +55,13 @@ app.UseMiddleware<ExceptionHandlerMiddleware>();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+  app.UseSwagger();
+  app.UseSwaggerUI();
 }
 
 app.UseHttpsRedirection();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 

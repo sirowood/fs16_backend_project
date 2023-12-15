@@ -18,4 +18,9 @@ public class CustomException : Exception
   {
     return new CustomException(404, msg);
   }
+
+  public static CustomException LoginFailed()
+  {
+    return new CustomException(400, "Invalid Email or Password.");
+  }
 }

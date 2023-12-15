@@ -54,6 +54,14 @@ public class UserService : IUserService
     throw new NotImplementedException();
   }
 
+  public string Login(LoginDTO loginDTO)
+  {
+    var user = _userRepo.Login(loginDTO.Email, loginDTO.Password)
+      ?? throw CustomException.LoginFailed();
+
+    return _userRepo.GenerateToken(user);
+  }
+
   public UserReadDTO UpdateOne(UserUpdateDTO updateDTO)
   {
     throw new NotImplementedException();
