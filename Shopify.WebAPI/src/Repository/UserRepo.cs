@@ -34,11 +34,6 @@ public class UserRepo : IUserRepo
     throw new NotImplementedException();
   }
 
-  public User? Login(string email, string password)
-  {
-    return _users.FirstOrDefault(u => u.Email == email && u.Password == password);
-  }
-
   public string GenerateToken(User user)
   {
     var claims = new List<Claim>

@@ -27,7 +27,14 @@ public class UserService : IUserService
     }
 
     var user = _mapper.Map<UserCreateDTO, User>(createDTO);
+
+    PasswordService.HashPassword(createDTO.Password, out string salt, out string hashedPassword);
+
+    user.Password = hashedPassword;
+    user.Salt = salt;
+
     var createdUser = _userRepo.CreateOne(user);
+
     return _mapper.Map<User, UserReadDTO>(createdUser);
   }
 
@@ -56,8 +63,15 @@ public class UserService : IUserService
 
   public string Login(LoginDTO loginDTO)
   {
-    var user = _userRepo.Login(loginDTO.Email, loginDTO.Password)
+    var user = _userRepo.GetByEmail(loginDTO.Email)
       ?? throw CustomException.LoginFailed();
+
+    var isPasswordMatch = PasswordService.VerifyPassword(loginDTO.Password, user.Password, user.Salt);
+
+    if (!isPasswordMatch)
+    {
+      throw CustomException.LoginFailed();
+    }
 
     return _userRepo.GenerateToken(user);
   }

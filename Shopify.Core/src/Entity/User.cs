@@ -9,6 +9,7 @@ public class User : BaseEntity
   public required string LastName { get; set; }
   public required string Email { get; set; }
   public required string Password { get; set; }
+  public required string Salt { get; set; }
 }
 
 [JsonConverter(typeof(JsonStringEnumConverter))]
