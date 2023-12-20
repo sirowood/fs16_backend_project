@@ -1,37 +1,21 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+
 using Shopify.Core.src.Abstraction;
 using Shopify.Core.src.Entity;
-using Shopify.Core.src.Shared;
 using Shopify.WebAPI.src.Database;
 
 namespace Shopify.WebAPI.src.Repository;
 
-public class UserRepo : IUserRepo
+public class UserRepo : BaseRepo<User>, IUserRepo
 {
-  private readonly DbSet<User> _users;
-  private readonly DatabaseContext _database;
   private readonly IConfiguration _config;
 
-  public UserRepo(DatabaseContext database, IConfiguration config)
+  public UserRepo(DatabaseContext database, IConfiguration config) : base(database)
   {
-    _database = database;
     _config = config;
-    _users = database.Users;
-  }
-  public User CreateOne(User user)
-  {
-    _users.Add(user);
-    _database.SaveChanges();
-    return user;
-  }
-
-  public bool DeleteOne(Guid id)
-  {
-    throw new NotImplementedException();
   }
 
   public string GenerateToken(User user)
@@ -61,25 +45,8 @@ public class UserRepo : IUserRepo
     return tokenHandler.WriteToken(token);
   }
 
-  public IEnumerable<User> GetAll(GetAllOptions options)
-  {
-    return _users
-      .Skip(options.Offset)
-      .Take(options.Limit);
-  }
-
   public User? GetByEmail(string email)
   {
-    return _users.FirstOrDefault(u => u.Email == email);
-  }
-
-  public User GetById(Guid id)
-  {
-    throw new NotImplementedException();
-  }
-
-  public User UpdateOne(User updateObject)
-  {
-    throw new NotImplementedException();
+    return _data.FirstOrDefault(u => u.Email == email);
   }
 }
