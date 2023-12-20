@@ -41,19 +41,4 @@ public class UserService : BaseService<User, UserReadDTO, UserCreateDTO, UserUpd
 
     return _mapper.Map<User, UserReadDTO>(result);
   }
-
-  public string Login(LoginDTO loginDTO)
-  {
-    var user = _repo.GetByEmail(loginDTO.Email)
-      ?? throw CustomException.LoginFailed();
-
-    var isPasswordMatch = PasswordService.VerifyPassword(loginDTO.Password, user.Password, user.Salt);
-
-    if (!isPasswordMatch)
-    {
-      throw CustomException.LoginFailed();
-    }
-
-    return _repo.GenerateToken(user);
-  }
 }

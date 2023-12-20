@@ -35,11 +35,4 @@ public class UserController : BaseController<User, UserReadDTO, UserCreateDTO, U
   {
     return Ok(_userService.GetAll(options));
   }
-
-  [HttpPost("login")]
-  public ActionResult<string> Login([FromBody] LoginDTO loginDTO)
-  {
-    Console.WriteLine(loginDTO.ToString());
-    return _userService.Login(loginDTO);
-  }
 }

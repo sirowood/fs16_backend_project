@@ -26,9 +26,3 @@ public class UserUpdateDTO
   public required string LastName { get; set; }
   public required string Email { get; set; }
 }
-
-public class LoginDTO
-{
-  public required string Email { get; set; }
-  public required string Password { get; set; }
-}
