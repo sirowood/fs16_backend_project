@@ -19,8 +19,6 @@ public class UserController : BaseController<User, UserReadDTO, UserCreateDTO, U
   }
 
   [AllowAnonymous]
-  [ProducesResponseType(StatusCodes.Status201Created)]
-  [ProducesResponseType(StatusCodes.Status400BadRequest)]
   public override async Task<ActionResult<UserReadDTO>> CreateOneAsync([FromBody] UserCreateDTO createDTO)
   {
     var createdUser = await _userService.CreateOneAsync(createDTO);

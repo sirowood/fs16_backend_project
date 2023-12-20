@@ -1,3 +1,5 @@
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 using Shopify.Core.src.Entity;
@@ -18,14 +20,16 @@ public class BaseController<T, TReadDTO, TCreateDTO, TUpdateDTO> : ControllerBas
     _service = service;
   }
 
-  [HttpPost]
+  [HttpPost()]
+  [ProducesResponseType(StatusCodes.Status201Created)]
+  [ProducesResponseType(StatusCodes.Status400BadRequest)]
   public virtual async Task<ActionResult<TReadDTO>> CreateOneAsync([FromBody] TCreateDTO createDTO)
   {
     var createdObject = await _service.CreateOneAsync(createDTO);
-
     return CreatedAtAction(nameof(CreateOneAsync), createdObject);
   }
 
+  [Authorize(Roles = "Admin")]
   [HttpDelete("{id:guid}")]
   public virtual async Task<ActionResult<bool>> DeleteOneAsync([FromRoute] Guid id)
   {

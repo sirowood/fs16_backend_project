@@ -27,9 +27,14 @@ where T : BaseEntity
     return _mapper.Map<T, TReadDTO>(createdObject);
   }
 
-  public virtual Task<bool> DeleteOneAsync(Guid id)
+  public virtual async Task<bool> DeleteOneAsync(Guid id)
   {
-    throw new NotImplementedException();
+    var deleteObject = await _repo.GetByIdAsync(id)
+      ?? throw CustomException.NotFound();
+
+    var result = await _repo.DeleteOneAsync(deleteObject);
+
+    return result;
   }
 
   public virtual async Task<IEnumerable<TReadDTO>> GetAllAsync(GetAllOptions options)

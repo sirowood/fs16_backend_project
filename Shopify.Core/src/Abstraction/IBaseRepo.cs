@@ -9,5 +9,5 @@ public interface IBaseRepo<T> where T : BaseEntity
   Task<T?> GetByIdAsync(Guid id);
   Task<T> CreateOneAsync(T createObject);
   Task<T> UpdateOneAsync(T updateObject);
-  Task<bool> DeleteOneAsync(Guid id);
+  Task<bool> DeleteOneAsync(T deleteObject);
 }

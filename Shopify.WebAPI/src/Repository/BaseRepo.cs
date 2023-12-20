@@ -25,9 +25,12 @@ public class BaseRepo<T> : IBaseRepo<T> where T : BaseEntity
     return createObject;
   }
 
-  public async Task<bool> DeleteOneAsync(Guid id)
+  public async Task<bool> DeleteOneAsync(T deleteObject)
   {
-    throw new NotImplementedException();
+    _data.Remove(deleteObject);
+    await _databaseContext.SaveChangesAsync();
+
+    return true;
   }
 
   public async Task<IEnumerable<T>> GetAllAsync(GetAllOptions options)
