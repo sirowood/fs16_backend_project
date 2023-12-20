@@ -9,8 +9,6 @@ using Shopify.Service.src.DTO;
 
 namespace Shopify.Controller.src.Controller;
 
-[ApiController]
-[Route("api/v1/[controller]s")]
 public class UserController : BaseController<User, UserReadDTO, UserCreateDTO, UserUpdateDTO>
 {
   private readonly IUserService _userService;

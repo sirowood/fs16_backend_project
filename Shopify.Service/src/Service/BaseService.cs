@@ -3,6 +3,7 @@ using Shopify.Core.src.Abstraction;
 using Shopify.Core.src.Entity;
 using Shopify.Core.src.Shared;
 using Shopify.Service.src.Abstraction;
+using Shopify.Service.src.Shared;
 
 namespace Shopify.Service.src.Service;
 
@@ -40,7 +41,10 @@ where T : BaseEntity
 
   public virtual async Task<TReadDTO> GetByIdAsync(Guid id)
   {
-    throw new NotImplementedException();
+    var result = await _repo.GetByIdAsync(id)
+      ?? throw CustomException.NotFound();
+
+    return _mapper.Map<T, TReadDTO>(result);
   }
 
   public virtual async Task<TReadDTO> UpdateOneAsync(TUpdateDTO updateDTO)

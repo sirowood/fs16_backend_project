@@ -40,9 +40,11 @@ public class BaseRepo<T> : IBaseRepo<T> where T : BaseEntity
     return result;
   }
 
-  public async Task<T> GetByIdAsync(Guid id)
+  public async Task<T?> GetByIdAsync(Guid id)
   {
-    throw new NotImplementedException();
+    var result = await _data.FindAsync(id);
+
+    return result;
   }
 
   public async Task<T> UpdateOneAsync(T updateObject)
