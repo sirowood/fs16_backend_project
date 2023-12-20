@@ -5,5 +5,5 @@ namespace Shopify.Service.src.Abstraction;
 
 public interface IUserService : IBaseService<User, UserReadDTO, UserCreateDTO, UserUpdateDTO>
 {
-  UserReadDTO GetByEmail(string email);
+  Task<UserReadDTO> GetByEmailAsync(string email);
 }

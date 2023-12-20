@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+
 using Shopify.Core.src.Abstraction;
 using Shopify.Core.src.Entity;
 using Shopify.Core.src.Shared;
@@ -16,32 +17,35 @@ public class BaseRepo<T> : IBaseRepo<T> where T : BaseEntity
     _databaseContext = databaseContext;
     _data = _databaseContext.Set<T>();
   }
-  public T CreateOne(T createObject)
+  public async Task<T> CreateOneAsync(T createObject)
   {
     _data.Add(createObject);
-    _databaseContext.SaveChanges();
+    await _databaseContext.SaveChangesAsync();
 
     return createObject;
   }
 
-  public bool DeleteOne(Guid id)
+  public async Task<bool> DeleteOneAsync(Guid id)
   {
     throw new NotImplementedException();
   }
 
-  public IEnumerable<T> GetAll(GetAllOptions options)
+  public async Task<IEnumerable<T>> GetAllAsync(GetAllOptions options)
   {
-    return _data
+    var result = await _data
       .Skip(options.Offset)
-      .Take(options.Limit);
+      .Take(options.Limit)
+      .ToArrayAsync();
+
+    return result;
   }
 
-  public T GetById(Guid id)
+  public async Task<T> GetByIdAsync(Guid id)
   {
     throw new NotImplementedException();
   }
 
-  public T UpdateOne(T updateObject)
+  public async Task<T> UpdateOneAsync(T updateObject)
   {
     throw new NotImplementedException();
   }

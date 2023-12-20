@@ -23,16 +23,18 @@ public class UserController : BaseController<User, UserReadDTO, UserCreateDTO, U
   [AllowAnonymous]
   [ProducesResponseType(StatusCodes.Status201Created)]
   [ProducesResponseType(StatusCodes.Status400BadRequest)]
-  public override ActionResult<UserReadDTO> CreateOne([FromBody] UserCreateDTO createDTO)
+  public override async Task<ActionResult<UserReadDTO>> CreateOneAsync([FromBody] UserCreateDTO createDTO)
   {
-    var createdUser = _userService.CreateOne(createDTO);
-    return CreatedAtAction(nameof(CreateOne), createdUser);
+    var createdUser = await _userService.CreateOneAsync(createDTO);
+
+    return CreatedAtAction(nameof(CreateOneAsync), createdUser);
   }
 
   [Authorize(Roles = "Admin")]
   [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-  public override ActionResult<IEnumerable<UserReadDTO>> GetAll([FromQuery] GetAllOptions options)
+  public override async Task<ActionResult<IEnumerable<UserReadDTO>>> GetAllAsync([FromQuery] GetAllOptions options)
   {
-    return Ok(_userService.GetAll(options));
+    var result = await _userService.GetAllAsync(options);
+    return Ok(result);
   }
 }

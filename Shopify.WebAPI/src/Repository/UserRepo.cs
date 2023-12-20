@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+
 using Shopify.Core.src.Abstraction;
 using Shopify.Core.src.Entity;
 using Shopify.WebAPI.src.Database;
@@ -11,8 +13,10 @@ public class UserRepo : BaseRepo<User>, IUserRepo
   {
   }
 
-  public User? GetByEmail(string email)
+  public async Task<User?> GetByEmailAsync(string email)
   {
-    return _data.FirstOrDefault(u => u.Email == email);
+    var result = await _data.FirstOrDefaultAsync(u => u.Email == email);
+
+    return result;
   }
 }

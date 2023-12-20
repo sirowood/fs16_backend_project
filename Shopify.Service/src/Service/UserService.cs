@@ -15,9 +15,9 @@ public class UserService : BaseService<User, UserReadDTO, UserCreateDTO, UserUpd
     _repo = repo;
   }
 
-  public override UserReadDTO CreateOne(UserCreateDTO createDTO)
+  public override async Task<UserReadDTO> CreateOneAsync(UserCreateDTO createDTO)
   {
-    if (_repo.GetByEmail(createDTO.Email) is not null)
+    if (await _repo.GetByEmailAsync(createDTO.Email) is not null)
     {
       throw CustomException.EmailIsNotAvailable();
     }
@@ -29,14 +29,14 @@ public class UserService : BaseService<User, UserReadDTO, UserCreateDTO, UserUpd
     user.Password = hashedPassword;
     user.Salt = salt;
 
-    var createdUser = _repo.CreateOne(user);
+    var createdUser = await _repo.CreateOneAsync(user);
 
     return _mapper.Map<User, UserReadDTO>(createdUser);
   }
 
-  public UserReadDTO GetByEmail(string email)
+  public async Task<UserReadDTO> GetByEmailAsync(string email)
   {
-    var result = _repo.GetByEmail(email)
+    var result = await _repo.GetByEmailAsync(email)
       ?? throw CustomException.NotFound("No such user.");
 
     return _mapper.Map<User, UserReadDTO>(result);

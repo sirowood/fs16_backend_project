@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+
 using Shopify.Core.src.Shared;
 using Shopify.Service.src.Abstraction;
 
@@ -16,8 +17,9 @@ public class AuthController
   }
 
   [HttpPost("login")]
-  public ActionResult<string> Login([FromBody] Credentials credentials)
+  public async Task<ActionResult<string>> LoginAsync([FromBody] Credentials credentials)
   {
-    return _authService.Login(credentials);
+    var result = await _authService.LoginAsync(credentials);
+    return result;
   }
 }

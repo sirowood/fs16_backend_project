@@ -4,5 +4,5 @@ namespace Shopify.Service.src.Abstraction;
 
 public interface IAuthService
 {
-  string Login(Credentials credentials);
+  Task<string> LoginAsync(Credentials credentials);
 }

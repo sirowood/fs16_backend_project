@@ -4,9 +4,9 @@ namespace Shopify.Service.src.Abstraction;
 
 public interface IBaseService<T, TReadDTO, TCreateDTO, TUpdateDTO>
 {
-  IEnumerable<TReadDTO> GetAll(GetAllOptions options);
-  TReadDTO GetById(Guid id);
-  TReadDTO CreateOne(TCreateDTO createDTO);
-  TReadDTO UpdateOne(TUpdateDTO updateDTO);
-  bool DeleteOne(Guid id);
+  Task<IEnumerable<TReadDTO>> GetAllAsync(GetAllOptions options);
+  Task<TReadDTO> GetByIdAsync(Guid id);
+  Task<TReadDTO> CreateOneAsync(TCreateDTO createDTO);
+  Task<TReadDTO> UpdateOneAsync(TUpdateDTO updateDTO);
+  Task<bool> DeleteOneAsync(Guid id);
 }

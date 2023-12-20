@@ -16,9 +16,9 @@ public class AuthService : IAuthService
     _tokenService = tokenService;
   }
 
-  public string Login(Credentials credentials)
+  public async Task<string> LoginAsync(Credentials credentials)
   {
-    var user = _repo.GetByEmail(credentials.Email)
+    var user = await _repo.GetByEmailAsync(credentials.Email)
       ?? throw CustomException.LoginFailed();
 
     var isPasswordMatch = PasswordService.VerifyPassword(credentials.Password, user.Password, user.Salt);
@@ -28,6 +28,8 @@ public class AuthService : IAuthService
       throw CustomException.LoginFailed();
     }
 
-    return _tokenService.GenerateToken(user);
+    var token = _tokenService.GenerateToken(user);
+
+    return token;
   }
 }

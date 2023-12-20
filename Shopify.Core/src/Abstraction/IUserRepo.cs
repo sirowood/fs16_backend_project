@@ -4,5 +4,5 @@ namespace Shopify.Core.src.Abstraction;
 
 public interface IUserRepo : IBaseRepo<User>
 {
-  User? GetByEmail(string email);
+  Task<User?> GetByEmailAsync(string email);
 }

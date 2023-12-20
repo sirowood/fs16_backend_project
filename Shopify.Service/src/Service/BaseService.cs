@@ -18,32 +18,32 @@ where T : BaseEntity
     _mapper = mapper;
   }
 
-  public virtual TReadDTO CreateOne(TCreateDTO createDTO)
+  public virtual async Task<TReadDTO> CreateOneAsync(TCreateDTO createDTO)
   {
     var newObject = _mapper.Map<TCreateDTO, T>(createDTO);
-    var createdObject = _repo.CreateOne(newObject);
+    var createdObject = await _repo.CreateOneAsync(newObject);
 
     return _mapper.Map<T, TReadDTO>(createdObject);
   }
 
-  public virtual bool DeleteOne(Guid id)
+  public virtual Task<bool> DeleteOneAsync(Guid id)
   {
     throw new NotImplementedException();
   }
 
-  public virtual IEnumerable<TReadDTO> GetAll(GetAllOptions options)
+  public virtual async Task<IEnumerable<TReadDTO>> GetAllAsync(GetAllOptions options)
   {
-    var objects = _repo.GetAll(options);
+    var objects = await _repo.GetAllAsync(options);
 
     return _mapper.Map<IEnumerable<T>, IEnumerable<TReadDTO>>(objects);
   }
 
-  public virtual TReadDTO GetById(Guid id)
+  public virtual async Task<TReadDTO> GetByIdAsync(Guid id)
   {
     throw new NotImplementedException();
   }
 
-  public virtual TReadDTO UpdateOne(TUpdateDTO updateDTO)
+  public virtual async Task<TReadDTO> UpdateOneAsync(TUpdateDTO updateDTO)
   {
     throw new NotImplementedException();
   }

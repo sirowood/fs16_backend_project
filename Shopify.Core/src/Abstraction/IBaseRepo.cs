@@ -5,9 +5,9 @@ namespace Shopify.Core.src.Abstraction;
 
 public interface IBaseRepo<T> where T : BaseEntity
 {
-  IEnumerable<T> GetAll(GetAllOptions options);
-  T GetById(Guid id);
-  T CreateOne(T createObject);
-  T UpdateOne(T updateObject);
-  bool DeleteOne(Guid id);
+  Task<IEnumerable<T>> GetAllAsync(GetAllOptions options);
+  Task<T> GetByIdAsync(Guid id);
+  Task<T> CreateOneAsync(T createObject);
+  Task<T> UpdateOneAsync(T updateObject);
+  Task<bool> DeleteOneAsync(Guid id);
 }
