@@ -57,7 +57,7 @@ public class BaseController<T, TReadDTO, TCreateDTO, TUpdateDTO> : ControllerBas
   [HttpPatch("{id:guid}")]
   public virtual async Task<ActionResult<TReadDTO>> UpdateOneAsync([FromRoute] Guid id, [FromBody] TUpdateDTO updateDTO)
   {
-    var result = await _service.UpdateOneAsync(updateDTO);
+    var result = await _service.UpdateOneAsync(id, updateDTO);
 
     return Ok(result);
   }

@@ -52,8 +52,15 @@ where T : BaseEntity
     return _mapper.Map<T, TReadDTO>(result);
   }
 
-  public virtual async Task<TReadDTO> UpdateOneAsync(TUpdateDTO updateDTO)
+  public virtual async Task<TReadDTO> UpdateOneAsync(Guid id, TUpdateDTO updateDTO)
   {
-    throw new NotImplementedException();
+    var originalEntity = await _repo.GetByIdAsync(id)
+      ?? throw CustomException.NotFound();
+
+    var updatedEntity = _mapper.Map(updateDTO, originalEntity);
+
+    var result = await _repo.UpdateOneAsync(updatedEntity);
+
+    return _mapper.Map<T, TReadDTO>(result);
   }
 }

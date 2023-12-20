@@ -50,8 +50,11 @@ public class BaseRepo<T> : IBaseRepo<T> where T : BaseEntity
     return result;
   }
 
-  public async Task<T> UpdateOneAsync(T updateObject)
+  public async Task<T> UpdateOneAsync(T updatedEntity)
   {
-    throw new NotImplementedException();
+    _data.Update(updatedEntity);
+    await _databaseContext.SaveChangesAsync();
+
+    return updatedEntity;
   }
 }
