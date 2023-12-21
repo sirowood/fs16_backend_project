@@ -9,6 +9,7 @@ public class DatabaseContext : DbContext
   private readonly IConfiguration _config;
   public DbSet<User> Users { get; set; }
   public DbSet<Address> Addresses { get; set; }
+  public DbSet<Category> Categories { get; set; }
 
   public DatabaseContext(DbContextOptions options, IConfiguration config) : base(options)
   {
@@ -41,6 +42,11 @@ public class DatabaseContext : DbContext
       entity.HasIndex(e => e.Email)
       .IsUnique();
     });
+
+    modelBuilder
+      .Entity<Category>()
+      .HasIndex(e => e.Name)
+      .IsUnique();
 
     base.OnModelCreating(modelBuilder);
   }

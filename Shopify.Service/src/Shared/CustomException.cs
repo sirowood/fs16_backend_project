@@ -9,9 +9,9 @@ public class CustomException : Exception
     StatusCode = statusCode;
   }
 
-  public static CustomException EmailIsNotAvailable()
+  public static CustomException NotAvailable(string message)
   {
-    return new CustomException(400, "Email is not available.");
+    return new CustomException(400, message);
   }
 
   public static CustomException NotFound(string msg = "Not found.")

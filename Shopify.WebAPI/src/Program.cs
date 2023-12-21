@@ -28,7 +28,9 @@ builder.Services
   .AddScoped<IUserService, UserService>()
   .AddScoped<IUserRepo, UserRepo>()
   .AddScoped<IAddressService, AddressService>()
-  .AddScoped<IAddressRepo, AddressRepo>();
+  .AddScoped<IAddressRepo, AddressRepo>()
+  .AddScoped<ICategoryService, CategoryService>()
+  .AddScoped<ICategoryRepo, CategoryRepo>();
 
 
 builder.Services.AddTransient<ExceptionHandlerMiddleware>();

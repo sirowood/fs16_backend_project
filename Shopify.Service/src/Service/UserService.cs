@@ -18,19 +18,19 @@ public class UserService : BaseService<User, UserReadDTO, UserCreateDTO, UserUpd
     _repo = repo;
   }
 
-  private async Task<bool> EmailIsAvailable(string email)
+  private async Task CheckEmailAvailability(string email)
   {
-    return await _repo.GetByEmailAsync(email) is null;
+    var emailAvailable = await _repo.GetByEmailAsync(email) is null;
+
+    if (!emailAvailable)
+    {
+      throw CustomException.NotAvailable("Email is not available.");
+    }
   }
 
   public override async Task<UserReadDTO> CreateOneAsync(UserCreateDTO createDTO)
   {
-    var emailAvailable = await EmailIsAvailable(createDTO.Email);
-
-    if (!emailAvailable)
-    {
-      throw CustomException.EmailIsNotAvailable();
-    }
+    await CheckEmailAvailability(createDTO.Email);
 
     var user = _mapper.Map<UserCreateDTO, User>(createDTO);
 
@@ -80,14 +80,9 @@ public class UserService : BaseService<User, UserReadDTO, UserCreateDTO, UserUpd
     var originalEntity = await _repo.GetByIdAsync(userId)
       ?? throw CustomException.NotFound();
 
-    if (updateDTO.Email is not null && updateDTO.Email != originalEntity.Email)
+    if (updateDTO.Email != originalEntity.Email)
     {
-      var emailAvailable = await EmailIsAvailable(updateDTO.Email);
-
-      if (!emailAvailable)
-      {
-        throw CustomException.EmailIsNotAvailable();
-      }
+      await CheckEmailAvailability(updateDTO.Email);
     }
 
     var updatedEntity = _mapper.Map(updateDTO, originalEntity);
