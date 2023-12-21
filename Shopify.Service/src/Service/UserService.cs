@@ -1,6 +1,7 @@
 using AutoMapper;
 using Shopify.Core.src.Abstraction;
 using Shopify.Core.src.Entity;
+using Shopify.Core.src.Shared;
 using Shopify.Service.src.Abstraction;
 using Shopify.Service.src.DTO;
 using Shopify.Service.src.Shared;
@@ -40,5 +41,28 @@ public class UserService : BaseService<User, UserReadDTO, UserCreateDTO, UserUpd
       ?? throw CustomException.NotFound("No such user.");
 
     return _mapper.Map<User, UserReadDTO>(result);
+  }
+
+  public async Task<bool> UpdatePasswordAsync(Guid userId, ChangePasswords passwords)
+  {
+    var user = await _repo.GetByIdAsync(userId)
+      ?? throw CustomException.NotFound();
+
+    var isPasswordMatch = PasswordService.VerifyPassword(passwords.OriginalPassword, user.Password, user.Salt);
+
+    if (!isPasswordMatch)
+    {
+      throw CustomException.WrongPassword();
+    }
+
+    PasswordService.HashPassword(passwords.NewPassword, out string salt, out string hashedPassword);
+
+    user.Password = hashedPassword;
+    user.Salt = salt;
+    user.UpdatedAt = DateTime.UtcNow;
+
+    await _repo.UpdateOneAsync(user);
+
+    return true;
   }
 }

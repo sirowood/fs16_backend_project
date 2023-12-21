@@ -23,4 +23,9 @@ public class CustomException : Exception
   {
     return new CustomException(400, "Invalid Email or Password.");
   }
+
+  public static CustomException WrongPassword()
+  {
+    return new CustomException(401, "Wrong original password.");
+  }
 }
