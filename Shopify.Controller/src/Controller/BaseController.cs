@@ -54,6 +54,7 @@ public class BaseController<T, TReadDTO, TCreateDTO, TUpdateDTO> : ControllerBas
     return Ok(result);
   }
 
+  [Authorize(Roles = "Admin")]
   [HttpPatch("{id:guid}")]
   public virtual async Task<ActionResult<TReadDTO>> UpdateOneAsync([FromRoute] Guid id, [FromBody] TUpdateDTO updateDTO)
   {

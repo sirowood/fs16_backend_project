@@ -7,7 +7,6 @@ using Shopify.Core.src.Entity;
 using Shopify.Core.src.Shared;
 using Shopify.Service.src.Abstraction;
 using Shopify.Service.src.DTO;
-using Shopify.Service.src.Shared;
 
 namespace Shopify.Controller.src.Controller;
 
@@ -40,6 +39,18 @@ public class UserController : BaseController<User, UserReadDTO, UserCreateDTO, U
     var userId = Guid.Parse(userIdClaim!.Value);
 
     var result = await _service.UpdatePasswordAsync(userId, passwords);
+
+    return Ok(result);
+  }
+
+  [Authorize()]
+  [HttpPatch("profile")]
+  public virtual async Task<ActionResult<UserReadDTO>> UpdateOneAsync([FromBody] UserUpdateDTO updateDTO)
+  {
+    var userIdClaim = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier);
+    var userId = Guid.Parse(userIdClaim!.Value);
+
+    var result = await base.UpdateOneAsync(userId, updateDTO);
 
     return Ok(result);
   }
