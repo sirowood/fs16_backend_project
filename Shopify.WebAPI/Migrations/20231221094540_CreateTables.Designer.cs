@@ -13,8 +13,8 @@ using Shopify.WebAPI.src.Database;
 namespace Shopify.WebAPI.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20231213184026_CreateDatabase")]
-    partial class CreateDatabase
+    [Migration("20231221094540_CreateTables")]
+    partial class CreateTables
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -67,12 +67,12 @@ namespace Shopify.WebAPI.Migrations
                         .HasColumnName("user_id");
 
                     b.HasKey("Id")
-                        .HasName("pk_address");
+                        .HasName("pk_addresses");
 
                     b.HasIndex("UserId")
-                        .HasDatabaseName("ix_address_user_id");
+                        .HasDatabaseName("ix_addresses_user_id");
 
-                    b.ToTable("address", (string)null);
+                    b.ToTable("addresses", (string)null);
                 });
 
             modelBuilder.Entity("Shopify.Core.src.Entity.User", b =>
@@ -110,12 +110,21 @@ namespace Shopify.WebAPI.Migrations
                         .HasColumnType("role")
                         .HasColumnName("role");
 
+                    b.Property<string>("Salt")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("salt");
+
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("updated_at");
 
                     b.HasKey("Id")
                         .HasName("pk_users");
+
+                    b.HasIndex("Email")
+                        .IsUnique()
+                        .HasDatabaseName("ix_users_email");
 
                     b.ToTable("users", (string)null);
                 });
@@ -127,7 +136,7 @@ namespace Shopify.WebAPI.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_address_users_user_id");
+                        .HasConstraintName("fk_addresses_users_user_id");
                 });
 #pragma warning restore 612, 618
         }

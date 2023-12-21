@@ -45,7 +45,7 @@ public class UserController : BaseController<User, UserReadDTO, UserCreateDTO, U
 
   [Authorize()]
   [HttpPatch("profile")]
-  public virtual async Task<ActionResult<UserReadDTO>> UpdateOneAsync([FromBody] UserUpdateDTO updateDTO)
+  public async Task<ActionResult<UserReadDTO>> UpdateOneAsync([FromBody] UserUpdateDTO updateDTO)
   {
     var userIdClaim = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier);
     var userId = Guid.Parse(userIdClaim!.Value);
@@ -57,12 +57,12 @@ public class UserController : BaseController<User, UserReadDTO, UserCreateDTO, U
 
   [Authorize()]
   [HttpDelete("profile")]
-  public virtual async Task<ActionResult<bool>> DeleteOneAsync()
+  public async Task<ActionResult<bool>> DeleteOneAsync()
   {
     var userIdClaim = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier);
     var userId = Guid.Parse(userIdClaim!.Value);
 
-    var result = await _service.DeleteOneAsync(userId);
+    var result = await base.DeleteOneAsync(userId);
 
     return Ok(result);
   }

@@ -8,6 +8,7 @@ public class AddressReadDTO : BaseEntity
   public required string PostCode { get; set; }
   public required string City { get; set; }
   public required string Country { get; set; }
+  public required Guid UserId { get; set; }
 }
 
 public class AddressCreateDTO
@@ -16,7 +17,7 @@ public class AddressCreateDTO
   public required string PostCode { get; set; }
   public required string City { get; set; }
   public required string Country { get; set; }
-  public required Guid UserId { get; set; }
+  public Guid? UserId { get; set; }
 }
 
 public class AddressUpdateDTO
@@ -25,4 +26,5 @@ public class AddressUpdateDTO
   public required string PostCode { get; set; }
   public required string City { get; set; }
   public required string Country { get; set; }
+  public required Guid UserId { get; set; }
 }

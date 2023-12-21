@@ -20,6 +20,7 @@ public class BaseController<T, TReadDTO, TCreateDTO, TUpdateDTO> : ControllerBas
     _service = service;
   }
 
+  [Authorize]
   [HttpPost()]
   [ProducesResponseType(StatusCodes.Status201Created)]
   [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -29,7 +30,7 @@ public class BaseController<T, TReadDTO, TCreateDTO, TUpdateDTO> : ControllerBas
     return CreatedAtAction(nameof(CreateOneAsync), createdObject);
   }
 
-  [Authorize(Roles = "Admin")]
+  [Authorize]
   [HttpDelete("{id:guid}")]
   public virtual async Task<ActionResult<bool>> DeleteOneAsync([FromRoute] Guid id)
   {
@@ -54,7 +55,7 @@ public class BaseController<T, TReadDTO, TCreateDTO, TUpdateDTO> : ControllerBas
     return Ok(result);
   }
 
-  [Authorize(Roles = "Admin")]
+  [Authorize]
   [HttpPatch("{id:guid}")]
   public virtual async Task<ActionResult<TReadDTO>> UpdateOneAsync([FromRoute] Guid id, [FromBody] TUpdateDTO updateDTO)
   {

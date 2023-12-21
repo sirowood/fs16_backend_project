@@ -28,4 +28,9 @@ public class CustomException : Exception
   {
     return new CustomException(401, "Wrong original password.");
   }
+
+  public static CustomException NotAllowed()
+  {
+    return new CustomException(405, "Not allowed.");
+  }
 }

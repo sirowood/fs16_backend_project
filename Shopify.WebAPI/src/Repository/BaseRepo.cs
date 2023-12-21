@@ -36,6 +36,7 @@ public class BaseRepo<T> : IBaseRepo<T> where T : BaseEntity
   public async Task<IEnumerable<T>> GetAllAsync(GetAllOptions options)
   {
     var result = await _data
+      .OrderBy(entity => entity.Id)
       .Skip(options.Offset)
       .Take(options.Limit)
       .ToArrayAsync();

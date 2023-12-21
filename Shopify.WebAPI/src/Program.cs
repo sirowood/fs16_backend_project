@@ -22,10 +22,14 @@ builder.Services.AddControllersWithViews(options => { options.SuppressAsyncSuffi
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<ITokenService, TokenService>();
-builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IUserRepo, UserRepo>();
+builder.Services
+  .AddScoped<ITokenService, TokenService>()
+  .AddScoped<IAuthService, AuthService>()
+  .AddScoped<IUserService, UserService>()
+  .AddScoped<IUserRepo, UserRepo>()
+  .AddScoped<IAddressService, AddressService>()
+  .AddScoped<IAddressRepo, AddressRepo>();
+
 
 builder.Services.AddTransient<ExceptionHandlerMiddleware>();
 

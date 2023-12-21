@@ -7,7 +7,7 @@ using Shopify.Core.src.Entity;
 namespace Shopify.WebAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class CreateDatabase : Migration
+    public partial class CreateTables : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -25,6 +25,7 @@ namespace Shopify.WebAPI.Migrations
                     last_name = table.Column<string>(type: "text", nullable: false),
                     email = table.Column<string>(type: "text", nullable: false),
                     password = table.Column<string>(type: "text", nullable: false),
+                    salt = table.Column<string>(type: "text", nullable: false),
                     created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
@@ -34,7 +35,7 @@ namespace Shopify.WebAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "address",
+                name: "addresses",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -48,9 +49,9 @@ namespace Shopify.WebAPI.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_address", x => x.id);
+                    table.PrimaryKey("pk_addresses", x => x.id);
                     table.ForeignKey(
-                        name: "fk_address_users_user_id",
+                        name: "fk_addresses_users_user_id",
                         column: x => x.user_id,
                         principalTable: "users",
                         principalColumn: "id",
@@ -58,16 +59,22 @@ namespace Shopify.WebAPI.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "ix_address_user_id",
-                table: "address",
+                name: "ix_addresses_user_id",
+                table: "addresses",
                 column: "user_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_users_email",
+                table: "users",
+                column: "email",
+                unique: true);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "address");
+                name: "addresses");
 
             migrationBuilder.DropTable(
                 name: "users");
