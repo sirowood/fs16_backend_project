@@ -54,4 +54,16 @@ public class UserController : BaseController<User, UserReadDTO, UserCreateDTO, U
 
     return Ok(result);
   }
+
+  [Authorize()]
+  [HttpDelete("profile")]
+  public virtual async Task<ActionResult<bool>> DeleteOneAsync()
+  {
+    var userIdClaim = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier);
+    var userId = Guid.Parse(userIdClaim!.Value);
+
+    var result = await _service.DeleteOneAsync(userId);
+
+    return Ok(result);
+  }
 }
