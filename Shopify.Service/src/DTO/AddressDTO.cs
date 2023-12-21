@@ -2,8 +2,9 @@ using Shopify.Core.src.Entity;
 
 namespace Shopify.Service.src.DTO;
 
-public class AddressReadDTO : BaseEntity
+public class AddressReadDTO
 {
+  public required Guid Id { get; set; }
   public required string Street { get; set; }
   public required string PostCode { get; set; }
   public required string City { get; set; }

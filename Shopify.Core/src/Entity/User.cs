@@ -10,6 +10,7 @@ public class User : BaseEntity
   public required string Email { get; set; }
   public required string Password { get; set; }
   public required string Salt { get; set; }
+  public IEnumerable<Address> Addresses { get; } = new List<Address>();
 }
 
 [JsonConverter(typeof(JsonStringEnumConverter))]

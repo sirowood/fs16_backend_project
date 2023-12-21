@@ -33,7 +33,7 @@ public class BaseRepo<T> : IBaseRepo<T> where T : BaseEntity
     return true;
   }
 
-  public async Task<IEnumerable<T>> GetAllAsync(GetAllOptions options)
+  public virtual async Task<IEnumerable<T>> GetAllAsync(GetAllOptions options)
   {
     var result = await _data
       .OrderBy(entity => entity.Id)

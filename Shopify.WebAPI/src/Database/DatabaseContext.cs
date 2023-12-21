@@ -42,13 +42,6 @@ public class DatabaseContext : DbContext
       .IsUnique();
     });
 
-    modelBuilder
-      .Entity<Address>()
-      .HasOne<User>()
-      .WithMany()
-      .HasForeignKey(a => a.UserId)
-      .OnDelete(DeleteBehavior.Cascade);
-
     base.OnModelCreating(modelBuilder);
   }
 }

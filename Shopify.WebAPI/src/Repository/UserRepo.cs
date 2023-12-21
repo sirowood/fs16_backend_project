@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 
 using Shopify.Core.src.Abstraction;
 using Shopify.Core.src.Entity;
+using Shopify.Core.src.Shared;
 using Shopify.WebAPI.src.Database;
 
 namespace Shopify.WebAPI.src.Repository;
@@ -11,6 +12,18 @@ public class UserRepo : BaseRepo<User>, IUserRepo
 
   public UserRepo(DatabaseContext database) : base(database)
   {
+  }
+
+  public override async Task<IEnumerable<User>> GetAllAsync(GetAllOptions options)
+  {
+    var result = await _data
+      .Include(u => u.Addresses)
+      .OrderBy(entity => entity.Id)
+      .Skip(options.Offset)
+      .Take(options.Limit)
+      .ToArrayAsync();
+
+    return result;
   }
 
   public async Task<User?> GetByEmailAsync(string email)
