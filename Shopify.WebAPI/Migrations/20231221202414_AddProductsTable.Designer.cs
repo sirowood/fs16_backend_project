@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Shopify.Core.src.Entity;
@@ -12,9 +13,11 @@ using Shopify.WebAPI.src.Database;
 namespace Shopify.WebAPI.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20231221202414_AddProductsTable")]
+    partial class AddProductsTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -132,12 +135,12 @@ namespace Shopify.WebAPI.Migrations
                         .HasColumnName("updated_at");
 
                     b.HasKey("Id")
-                        .HasName("pk_images");
+                        .HasName("pk_image");
 
                     b.HasIndex("ProductId")
-                        .HasDatabaseName("ix_images_product_id");
+                        .HasDatabaseName("ix_image_product_id");
 
-                    b.ToTable("images", (string)null);
+                    b.ToTable("image", (string)null);
                 });
 
             modelBuilder.Entity("Shopify.Core.src.Entity.Product", b =>
@@ -253,19 +256,17 @@ namespace Shopify.WebAPI.Migrations
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_images_products_product_id");
+                        .HasConstraintName("fk_image_products_product_id");
                 });
 
             modelBuilder.Entity("Shopify.Core.src.Entity.Product", b =>
                 {
-                    b.HasOne("Shopify.Core.src.Entity.Category", "Category")
+                    b.HasOne("Shopify.Core.src.Entity.Category", null)
                         .WithMany("Products")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_products_categories_category_id");
-
-                    b.Navigation("Category");
                 });
 
             modelBuilder.Entity("Shopify.Core.src.Entity.Category", b =>

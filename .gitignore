@@ -6,6 +6,7 @@ appsettings.*.json
 ERD.vuerd.json
 obj/
 bin/
+Shopify.WebAPI/Migrations/
 
 # Visual Studio 2015/2017 cache/options directory
 .vs/

@@ -20,5 +20,13 @@ public class MapperProfile : Profile
     CreateMap<Category, CategoryReadDTO>();
     CreateMap<CategoryCreateDTO, Category>();
     CreateMap<CategoryUpdateDTO, Category>();
+
+    CreateMap<Product, ProductReadDTO>();
+    CreateMap<ProductCreateDTO, Product>();
+    CreateMap<ProductUpdateDTO, Product>();
+
+    CreateMap<Image, ImageReadDTO>();
+    CreateMap<ImageCreateDTO, Image>();
+    CreateMap<ImageUpdateDTO, Image>();
   }
 }

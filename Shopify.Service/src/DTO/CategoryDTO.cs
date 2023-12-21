@@ -1,9 +1,8 @@
-using Shopify.Core.src.Entity;
-
 namespace Shopify.Service.src.DTO;
 
-public class CategoryReadDTO : BaseEntity
+public class CategoryReadDTO
 {
+  public required Guid Id { get; set; }
   public required string Name { get; set; }
   public required string Image { get; set; }
 }

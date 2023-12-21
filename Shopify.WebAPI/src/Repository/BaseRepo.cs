@@ -17,7 +17,7 @@ public class BaseRepo<T> : IBaseRepo<T> where T : BaseEntity
     _databaseContext = databaseContext;
     _data = _databaseContext.Set<T>();
   }
-  public async Task<T> CreateOneAsync(T createObject)
+  public virtual async Task<T> CreateOneAsync(T createObject)
   {
     _data.Add(createObject);
     await _databaseContext.SaveChangesAsync();
@@ -44,7 +44,7 @@ public class BaseRepo<T> : IBaseRepo<T> where T : BaseEntity
     return result;
   }
 
-  public async Task<T?> GetByIdAsync(Guid id)
+  public virtual async Task<T?> GetByIdAsync(Guid id)
   {
     var result = await _data.FindAsync(id);
 

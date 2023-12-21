@@ -30,8 +30,11 @@ builder.Services
   .AddScoped<IAddressService, AddressService>()
   .AddScoped<IAddressRepo, AddressRepo>()
   .AddScoped<ICategoryService, CategoryService>()
-  .AddScoped<ICategoryRepo, CategoryRepo>();
-
+  .AddScoped<ICategoryRepo, CategoryRepo>()
+  .AddScoped<IProductService, ProductService>()
+  .AddScoped<IProductRepo, ProductRepo>()
+  .AddScoped<IImageService, ImageService>()
+  .AddScoped<IImageRepo, ImageRepo>();
 
 builder.Services.AddTransient<ExceptionHandlerMiddleware>();
 
