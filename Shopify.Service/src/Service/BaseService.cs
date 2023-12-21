@@ -58,6 +58,7 @@ where T : BaseEntity
       ?? throw CustomException.NotFound();
 
     var updatedEntity = _mapper.Map(updateDTO, originalEntity);
+    updatedEntity.UpdatedAt = DateTime.UtcNow;
 
     var result = await _repo.UpdateOneAsync(updatedEntity);
 
