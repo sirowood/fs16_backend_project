@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Shopify.WebAPI.src.Service;
+using Shopify.WebAPI.src.Authorization;
+using Microsoft.AspNetCore.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,7 +36,11 @@ builder.Services
   .AddScoped<IProductService, ProductService>()
   .AddScoped<IProductRepo, ProductRepo>()
   .AddScoped<IImageService, ImageService>()
-  .AddScoped<IImageRepo, ImageRepo>();
+  .AddScoped<IImageRepo, ImageRepo>()
+  .AddScoped<IOrderService, OrderService>()
+  .AddScoped<IOrderRepo, OrderRepo>();
+
+builder.Services.AddSingleton<IAuthorizationHandler, OrderOwnerHandler>();
 
 builder.Services.AddTransient<ExceptionHandlerMiddleware>();
 
@@ -59,6 +65,11 @@ builder
       ValidateIssuerSigningKey = true
     };
   });
+
+builder.Services.AddAuthorization(policy =>
+{
+  policy.AddPolicy("OrderOwner", policy => policy.Requirements.Add(new OrderOwnerRequirement()));
+});
 
 var app = builder.Build();
 

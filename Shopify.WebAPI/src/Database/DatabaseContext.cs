@@ -12,6 +12,8 @@ public class DatabaseContext : DbContext
   public DbSet<Category> Categories { get; set; }
   public DbSet<Product> Products { get; set; }
   public DbSet<Image> Images { get; set; }
+  public DbSet<Order> Orders { get; set; }
+  public DbSet<OrderDetail> OrderDetails { get; set; }
 
   public DatabaseContext(DbContextOptions options, IConfiguration config) : base(options)
   {
@@ -22,6 +24,7 @@ public class DatabaseContext : DbContext
   {
     var dataSourceBuilder = new NpgsqlDataSourceBuilder(_config.GetConnectionString("DatabaseURL"));
     dataSourceBuilder.MapEnum<Role>();
+    dataSourceBuilder.MapEnum<Status>();
     var dataSource = dataSourceBuilder.Build();
 
     optionsBuilder
@@ -34,7 +37,8 @@ public class DatabaseContext : DbContext
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
     modelBuilder
-      .HasPostgresEnum<Role>();
+      .HasPostgresEnum<Role>()
+      .HasPostgresEnum<Status>();
 
     modelBuilder.Entity<User>(entity =>
     {
@@ -46,9 +50,18 @@ public class DatabaseContext : DbContext
     });
 
     modelBuilder
+      .Entity<Order>()
+      .Property(e => e.Status)
+      .HasColumnType("status");
+
+    modelBuilder
       .Entity<Category>()
       .HasIndex(e => e.Name)
       .IsUnique();
+
+    modelBuilder
+      .Entity<OrderDetail>()
+      .HasKey(e => new { e.ProductId, e.OrderId });
 
     base.OnModelCreating(modelBuilder);
   }

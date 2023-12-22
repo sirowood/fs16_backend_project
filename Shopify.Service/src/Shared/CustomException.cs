@@ -29,8 +29,23 @@ public class CustomException : Exception
     return new CustomException(401, "Wrong original password.");
   }
 
-  public static CustomException NotAllowed()
+  public static CustomException NotAllowed(string message = "Not allowed.")
   {
-    return new CustomException(405, "Not allowed.");
+    return new CustomException(405, message);
+  }
+
+  public static CustomException EmptyOrderDetails()
+  {
+    return new CustomException(400, "Empty products in the order.");
+  }
+
+  public static CustomException InvalidQuantity()
+  {
+    return new CustomException(400, "Quantity must be greater than 0.");
+  }
+
+  public static CustomException InvalidPrice()
+  {
+    return new CustomException(400, "Price at purchase must be greater than 0.");
   }
 }
