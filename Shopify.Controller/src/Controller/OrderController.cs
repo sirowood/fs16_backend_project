@@ -30,6 +30,24 @@ public class OrderController : BaseController<Order, OrderReadDTO, OrderCreateDT
     return await base.CreateOneAsync(createDTO);
   }
 
+  [Authorize]
+  public override async Task<ActionResult<OrderReadDTO>> GetByIdAsync([FromRoute] Guid id)
+  {
+    var order = await _service.GetByIdAsync(id)
+      ?? throw CustomException.NotFound("Order not found.");
+
+
+    var authorizationResult = await _authorizationService
+      .AuthorizeAsync(User, order, "OrderOwnerOrAdmin");
+
+    if (!authorizationResult.Succeeded)
+    {
+      throw CustomException.NotAllowed("You're not the order owner or admin.");
+    }
+
+    return await base.GetByIdAsync(id);
+  }
+
   // No one could delete order in this application design
   [NonAction]
   public override async Task<ActionResult<bool>> DeleteOneAsync([FromRoute] Guid id)

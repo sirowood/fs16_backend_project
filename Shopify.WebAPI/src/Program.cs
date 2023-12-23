@@ -40,7 +40,9 @@ builder.Services
   .AddScoped<IOrderService, OrderService>()
   .AddScoped<IOrderRepo, OrderRepo>();
 
-builder.Services.AddSingleton<IAuthorizationHandler, OrderOwnerHandler>();
+builder.Services
+  .AddSingleton<IAuthorizationHandler, OrderOwnerHandler>()
+  .AddSingleton<IAuthorizationHandler, OrderOwnerOrAdminHandler>();
 
 builder.Services.AddTransient<ExceptionHandlerMiddleware>();
 
@@ -69,6 +71,7 @@ builder
 builder.Services.AddAuthorization(policy =>
 {
   policy.AddPolicy("OrderOwner", policy => policy.Requirements.Add(new OrderOwnerRequirement()));
+  policy.AddPolicy("OrderOwnerOrAdmin", policy => policy.Requirements.Add(new OrderOwnerOrAdminRequirement()));
 });
 
 var app = builder.Build();
