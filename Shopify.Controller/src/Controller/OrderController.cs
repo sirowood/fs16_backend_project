@@ -14,9 +14,11 @@ namespace Shopify.Controller.src.Controller;
 public class OrderController : BaseController<Order, OrderReadDTO, OrderCreateDTO, OrderUpdateDTO>
 {
   private readonly IAuthorizationService _authorizationService;
+  private readonly new IOrderService _service;
 
   public OrderController(IOrderService service, IAuthorizationService authorizationService) : base(service)
   {
+    _service = service;
     _authorizationService = authorizationService;
   }
 
@@ -52,6 +54,26 @@ public class OrderController : BaseController<Order, OrderReadDTO, OrderCreateDT
     }
 
     return await base.GetByIdAsync(id);
+  }
+
+  [Authorize]
+  [HttpGet("users/{id:guid}")]
+  public async Task<ActionResult<IEnumerable<OrderReadDTO>>> GetUserOrders([FromRoute] Guid id)
+  {
+    var userIdClaim = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier);
+    var userId = Guid.Parse(userIdClaim!.Value);
+
+    var userRole = HttpContext.User
+      .FindFirst(ClaimTypes.Role)!.Value;
+
+    if (userRole != "Admin" && userId != id)
+    {
+      throw CustomException.NotAllowed("Only admin or owner could get the orders.");
+    }
+
+    var orders = await _service.GetUserOrders(id);
+
+    return Ok(orders);
   }
 
   // No one could delete order in this application design

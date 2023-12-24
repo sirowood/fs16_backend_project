@@ -10,9 +10,11 @@ namespace Shopify.Service.src.Service;
 
 public class OrderService : BaseService<Order, OrderReadDTO, OrderCreateDTO, OrderUpdateDTO>, IOrderService
 {
+  private readonly new IOrderRepo _repo;
   private readonly IProductRepo _productRepo;
   public OrderService(IOrderRepo repo, IProductRepo productRepo, IMapper mapper) : base(repo, mapper)
   {
+    _repo = repo;
     _productRepo = productRepo;
   }
 
@@ -40,5 +42,12 @@ public class OrderService : BaseService<Order, OrderReadDTO, OrderCreateDTO, Ord
     }
 
     return await base.CreateOneAsync(createDTO);
+  }
+
+  public async Task<IEnumerable<OrderReadDTO>> GetUserOrders(Guid id)
+  {
+    var orders = await _repo.GetUserOrders(id);
+
+    return _mapper.Map<IEnumerable<Order>, IEnumerable<OrderReadDTO>>(orders);
   }
 }

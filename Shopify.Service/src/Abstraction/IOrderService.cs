@@ -5,4 +5,5 @@ namespace Shopify.Service.src.Abstraction;
 
 public interface IOrderService : IBaseService<Order, OrderReadDTO, OrderCreateDTO, OrderUpdateDTO>
 {
+  Task<IEnumerable<OrderReadDTO>> GetUserOrders(Guid id);
 }

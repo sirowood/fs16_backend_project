@@ -33,4 +33,16 @@ public class OrderRepo : BaseRepo<Order>, IOrderRepo
 
     return result;
   }
+
+  public async Task<IEnumerable<Order>> GetUserOrders(Guid id)
+  {
+    var result = await _data
+      .Where(e => e.UserId == id)
+      .Include(u => u.OrderDetails)
+        .ThenInclude(e => e.Product.Images)
+      .OrderBy(entity => entity.Id)
+      .ToArrayAsync();
+
+    return result;
+  }
 }

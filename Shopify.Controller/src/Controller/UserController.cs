@@ -35,10 +35,8 @@ public class UserController : BaseController<User, UserReadDTO, UserCreateDTO, U
   [Authorize]
   public override async Task<ActionResult<UserReadDTO>> GetByIdAsync([FromRoute] Guid id)
   {
-
     var userIdClaim = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier);
     var userId = Guid.Parse(userIdClaim!.Value);
-
 
     var userRole = HttpContext.User
       .FindFirst(ClaimTypes.Role)!.Value;
