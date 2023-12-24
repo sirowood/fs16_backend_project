@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
+
 using Shopify.Core.src.Entity;
 using Shopify.Service.src.DTO;
 

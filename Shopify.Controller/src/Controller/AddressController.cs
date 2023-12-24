@@ -59,7 +59,7 @@ public class AddressController : BaseController<Address, AddressReadDTO, Address
     return await base.DeleteOneAsync(id);
   }
 
-  [Authorize(Roles = "Admin")]
+  [NonAction]
   public override async Task<ActionResult<IEnumerable<AddressReadDTO>>> GetAllAsync([FromQuery] GetAllOptions options)
   {
     return await base.GetAllAsync(options);

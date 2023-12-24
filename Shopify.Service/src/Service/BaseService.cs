@@ -3,6 +3,7 @@ using Shopify.Core.src.Abstraction;
 using Shopify.Core.src.Entity;
 using Shopify.Core.src.Shared;
 using Shopify.Service.src.Abstraction;
+using Shopify.Service.src.DTO;
 using Shopify.Service.src.Shared;
 
 namespace Shopify.Service.src.Service;
@@ -37,11 +38,17 @@ where T : BaseEntity
     return result;
   }
 
-  public virtual async Task<IEnumerable<TReadDTO>> GetAllAsync(GetAllOptions options)
+  public virtual async Task<GetAllResponse<TReadDTO>> GetAllAsync(GetAllOptions options)
   {
-    var objects = await _repo.GetAllAsync(options);
+    var entities = await _repo.GetAllAsync(options);
 
-    return _mapper.Map<IEnumerable<T>, IEnumerable<TReadDTO>>(objects);
+    var readEntities = _mapper.Map<IEnumerable<T>, IEnumerable<TReadDTO>>(entities);
+
+    var total = await _repo.GetTotal();
+
+    var result = new GetAllResponse<TReadDTO> { Items = readEntities, Total = total };
+
+    return result;
   }
 
   public virtual async Task<TReadDTO> GetByIdAsync(Guid id)

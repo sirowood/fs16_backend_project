@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Shopify.Core.src.Entity;
+using Shopify.Core.src.Shared;
 using Shopify.Service.src.Abstraction;
 using Shopify.Service.src.DTO;
 
@@ -16,6 +17,12 @@ public class ImageController : BaseController<Image, ImageReadDTO, ImageCreateDT
   public override async Task<ActionResult<ImageReadDTO>> CreateOneAsync([FromBody] ImageCreateDTO createDTO)
   {
     return await base.CreateOneAsync(createDTO);
+  }
+
+  [NonAction]
+  public override Task<ActionResult<IEnumerable<ImageReadDTO>>> GetAllAsync([FromQuery] GetAllOptions options)
+  {
+    return base.GetAllAsync(options);
   }
 
   [Authorize(Roles = "Admin")]

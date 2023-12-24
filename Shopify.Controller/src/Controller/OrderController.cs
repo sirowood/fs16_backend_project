@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 using Shopify.Core.src.Entity;
+using Shopify.Core.src.Shared;
 using Shopify.Service.src.Abstraction;
 using Shopify.Service.src.DTO;
 using Shopify.Service.src.Shared;
@@ -28,6 +29,12 @@ public class OrderController : BaseController<Order, OrderReadDTO, OrderCreateDT
     createDTO.UserId = userId;
 
     return await base.CreateOneAsync(createDTO);
+  }
+
+  [Authorize(Roles = "Admin")]
+  public override Task<ActionResult<IEnumerable<OrderReadDTO>>> GetAllAsync([FromQuery] GetAllOptions options)
+  {
+    return base.GetAllAsync(options);
   }
 
   [Authorize]

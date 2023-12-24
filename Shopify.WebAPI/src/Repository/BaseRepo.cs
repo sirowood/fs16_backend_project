@@ -35,13 +35,20 @@ public class BaseRepo<T> : IBaseRepo<T> where T : BaseEntity
 
   public virtual async Task<IEnumerable<T>> GetAllAsync(GetAllOptions options)
   {
-    var result = await _data
+    var entities = await _data
       .OrderBy(entity => entity.Id)
       .Skip(options.Offset)
       .Take(options.Limit)
       .ToArrayAsync();
 
-    return result;
+    return entities;
+  }
+
+  public virtual async Task<int> GetTotal()
+  {
+    var total = await _data.CountAsync();
+
+    return total;
   }
 
   public virtual async Task<T?> GetByIdAsync(Guid id)
