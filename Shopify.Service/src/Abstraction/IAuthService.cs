@@ -6,5 +6,5 @@ namespace Shopify.Service.src.Abstraction;
 public interface IAuthService
 {
   Task<string> LoginAsync(Credentials credentials);
-  Task<bool> RegisterAsync(UserCreateDTO createDTO);
+  Task<bool> RegisterAsync(UserRegisterDTO createDTO);
 }

@@ -7,6 +7,7 @@ using Shopify.Core.src.Entity;
 using Shopify.Core.src.Shared;
 using Shopify.Service.src.Abstraction;
 using Shopify.Service.src.DTO;
+using Shopify.Service.src.Shared;
 
 namespace Shopify.Controller.src.Controller;
 
@@ -29,6 +30,25 @@ public class UserController : BaseController<User, UserReadDTO, UserCreateDTO, U
   public override async Task<ActionResult<IEnumerable<UserReadDTO>>> GetAllAsync([FromQuery] GetAllOptions options)
   {
     return await base.GetAllAsync(options);
+  }
+
+  [Authorize]
+  public override async Task<ActionResult<UserReadDTO>> GetByIdAsync([FromRoute] Guid id)
+  {
+
+    var userIdClaim = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier);
+    var userId = Guid.Parse(userIdClaim!.Value);
+
+
+    var userRole = HttpContext.User
+      .FindFirst(ClaimTypes.Role)!.Value;
+
+    if (userId != id && userRole != Role.Admin.ToString())
+    {
+      throw CustomException.NotAllowed();
+    }
+
+    return await base.GetByIdAsync(id);
   }
 
   [Authorize()]

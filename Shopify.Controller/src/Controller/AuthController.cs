@@ -28,11 +28,8 @@ public class AuthController : ControllerBase
 
   [AllowAnonymous]
   [HttpPost("register")]
-  public async Task<ActionResult<bool>> RegisterAsync([FromBody] UserCreateDTO createDTO)
+  public async Task<ActionResult<bool>> RegisterAsync([FromBody] UserRegisterDTO createDTO)
   {
-    // Force the role to be Customer for security
-    createDTO.Role = Role.Customer;
-
     var result = await _authService.RegisterAsync(createDTO);
 
     return Ok(result);

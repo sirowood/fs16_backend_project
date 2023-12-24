@@ -26,6 +26,15 @@ public class UserRepo : BaseRepo<User>, IUserRepo
     return result;
   }
 
+  public override async Task<User?> GetByIdAsync(Guid id)
+  {
+    var result = await _data
+      .Include(e => e.Addresses)
+      .FirstOrDefaultAsync(e => e.Id == id);
+
+    return result;
+  }
+
   public async Task<User?> GetByEmailAsync(string email)
   {
     var result = await _data.FirstOrDefaultAsync(u => u.Email == email);

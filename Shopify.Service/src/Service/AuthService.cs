@@ -49,11 +49,12 @@ public class AuthService : IAuthService
     }
   }
 
-  public async Task<bool> RegisterAsync(UserCreateDTO createDTO)
+  public async Task<bool> RegisterAsync(UserRegisterDTO createDTO)
   {
     await CheckEmailAvailability(createDTO.Email);
 
-    var user = _mapper.Map<UserCreateDTO, User>(createDTO);
+    var user = _mapper.Map<UserRegisterDTO, User>(createDTO);
+    user.Role = Role.Customer;
 
     PasswordService.HashPassword(createDTO.Password, out string salt, out string hashedPassword);
 

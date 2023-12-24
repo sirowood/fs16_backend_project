@@ -43,7 +43,6 @@ public class OrderController : BaseController<Order, OrderReadDTO, OrderCreateDT
     var order = await _service.GetByIdAsync(id)
       ?? throw CustomException.NotFound("Order not found.");
 
-
     var authorizationResult = await _authorizationService
       .AuthorizeAsync(User, order, "OrderOwnerOrAdmin");
 

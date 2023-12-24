@@ -11,6 +11,7 @@ public class User : BaseEntity
   public required string Password { get; set; }
   public required string Salt { get; set; }
   public IEnumerable<Address> Addresses { get; } = new List<Address>();
+  public required string Avatar { get; set; }
 }
 
 [JsonConverter(typeof(JsonStringEnumConverter))]

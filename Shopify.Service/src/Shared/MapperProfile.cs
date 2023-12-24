@@ -11,6 +11,7 @@ public class MapperProfile : Profile
   {
     CreateMap<User, UserReadDTO>();
     CreateMap<UserCreateDTO, User>();
+    CreateMap<UserRegisterDTO, User>();
     CreateMap<UserUpdateDTO, User>();
 
     CreateMap<Address, AddressReadDTO>();
