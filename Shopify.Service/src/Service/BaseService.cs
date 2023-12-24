@@ -44,7 +44,7 @@ where T : BaseEntity
 
     var readEntities = _mapper.Map<IEnumerable<T>, IEnumerable<TReadDTO>>(entities);
 
-    var total = await _repo.GetTotal();
+    var total = await _repo.GetTotal(options);
 
     var result = new GetAllResponse<TReadDTO> { Items = readEntities, Total = total };
 

@@ -44,7 +44,7 @@ public class BaseRepo<T> : IBaseRepo<T> where T : BaseEntity
     return entities;
   }
 
-  public virtual async Task<int> GetTotal()
+  public virtual async Task<int> GetTotal(GetAllOptions options)
   {
     var total = await _data.CountAsync();
 
