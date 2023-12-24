@@ -1,9 +1,8 @@
-using Shopify.Core.src.Entity;
-
 namespace Shopify.Service.src.DTO;
 
-public class ProductReadDTO : BaseEntity
+public class ProductReadDTO
 {
+  public required Guid Id { get; set; }
   public required string Title { get; set; }
   public required string Description { get; set; }
   public required decimal Price { get; set; }
