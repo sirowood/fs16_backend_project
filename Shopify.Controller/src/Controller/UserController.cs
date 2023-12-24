@@ -18,7 +18,7 @@ public class UserController : BaseController<User, UserReadDTO, UserCreateDTO, U
     _service = service;
   }
 
-  [AllowAnonymous]
+  [Authorize(Roles = "Admin")]
   public override async Task<ActionResult<UserReadDTO>> CreateOneAsync([FromBody] UserCreateDTO createDTO)
   {
     return await base.CreateOneAsync(createDTO);
@@ -55,7 +55,7 @@ public class UserController : BaseController<User, UserReadDTO, UserCreateDTO, U
     return Ok(result);
   }
 
-  [Authorize()]
+  [Authorize]
   [HttpDelete("profile")]
   public async Task<ActionResult<bool>> DeleteOneAsync()
   {
@@ -65,5 +65,11 @@ public class UserController : BaseController<User, UserReadDTO, UserCreateDTO, U
     var result = await base.DeleteOneAsync(userId);
 
     return Ok(result);
+  }
+
+  [Authorize(Roles = "Admin")]
+  public override async Task<ActionResult<bool>> DeleteOneAsync([FromRoute] Guid id)
+  {
+    return await base.DeleteOneAsync(id);
   }
 }
