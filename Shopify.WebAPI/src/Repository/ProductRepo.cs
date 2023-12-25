@@ -28,23 +28,40 @@ public class ProductRepo : BaseRepo<Product>, IProductRepo
     return createObject;
   }
 
+  private static IQueryable<Product> ApplyOrder(IQueryable<Product> query, string? orderBy = "Id", string? direction = "Asc")
+  {
+    return orderBy?.ToLower() switch
+    {
+      "title" => direction == "desc"
+        ? query.OrderByDescending(entity => entity.Title)
+        : query.OrderBy(entity => entity.Title),
+      "price" => direction == "desc"
+        ? query.OrderByDescending(entity => entity.Price)
+        : query.OrderBy(entity => entity.Price),
+      _ => query,
+    } ?? query;
+  }
+
   public override async Task<IEnumerable<Product>> GetAllAsync(GetAllOptions options)
   {
     var query = _data
         .Include(e => e.Category)
         .Include(e => e.Images)
-        .OrderBy(entity => entity.Id);
+        .AsQueryable();
 
     if (options.CategoryId.HasValue)
     {
-      query = (IOrderedQueryable<Product>)query
-        .Where(entity => entity.CategoryId == options.CategoryId);
+      query = query.Where(entity => entity.CategoryId == options.CategoryId);
     }
 
     if (!options.Title.IsNullOrEmpty())
     {
-      query = (IOrderedQueryable<Product>)query
-        .Where(entity => entity.Title.Contains(options.Title!));
+      query = query.Where(entity => entity.Title.Contains(options.Title!));
+    }
+
+    if (!options.OrderBy.IsNullOrEmpty())
+    {
+      query = ApplyOrder(query, options.OrderBy, options.Direction);
     }
 
     var result = await query

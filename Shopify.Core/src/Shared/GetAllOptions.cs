@@ -6,4 +6,6 @@ public class GetAllOptions
   public int Offset { get; set; } = 0;
   public Guid? CategoryId { get; set; }
   public string? Title { get; set; }
+  public string? OrderBy { get; set; }
+  public string? Direction { get; set; }
 }
