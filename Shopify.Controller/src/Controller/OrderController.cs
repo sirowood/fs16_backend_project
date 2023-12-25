@@ -34,7 +34,7 @@ public class OrderController : BaseController<Order, OrderReadDTO, OrderCreateDT
   }
 
   [Authorize(Roles = "Admin")]
-  public override Task<ActionResult<IEnumerable<OrderReadDTO>>> GetAllAsync([FromQuery] GetAllOptions options)
+  public override Task<ActionResult<GetAllResponse<OrderReadDTO>>> GetAllAsync([FromQuery] GetAllOptions options)
   {
     return base.GetAllAsync(options);
   }

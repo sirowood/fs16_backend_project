@@ -60,7 +60,7 @@ public class AddressController : BaseController<Address, AddressReadDTO, Address
   }
 
   [NonAction]
-  public override async Task<ActionResult<IEnumerable<AddressReadDTO>>> GetAllAsync([FromQuery] GetAllOptions options)
+  public override async Task<ActionResult<GetAllResponse<AddressReadDTO>>> GetAllAsync([FromQuery] GetAllOptions options)
   {
     return await base.GetAllAsync(options);
   }

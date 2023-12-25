@@ -20,7 +20,7 @@ public class ImageController : BaseController<Image, ImageReadDTO, ImageCreateDT
   }
 
   [NonAction]
-  public override Task<ActionResult<IEnumerable<ImageReadDTO>>> GetAllAsync([FromQuery] GetAllOptions options)
+  public override Task<ActionResult<GetAllResponse<ImageReadDTO>>> GetAllAsync([FromQuery] GetAllOptions options)
   {
     return base.GetAllAsync(options);
   }

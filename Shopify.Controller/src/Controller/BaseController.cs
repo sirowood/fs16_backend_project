@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Shopify.Core.src.Entity;
 using Shopify.Core.src.Shared;
 using Shopify.Service.src.Abstraction;
+using Shopify.Service.src.DTO;
 
 namespace Shopify.Controller.src.Controller;
 
@@ -40,7 +41,7 @@ public class BaseController<T, TReadDTO, TCreateDTO, TUpdateDTO> : ControllerBas
   }
 
   [HttpGet()]
-  public virtual async Task<ActionResult<IEnumerable<TReadDTO>>> GetAllAsync([FromQuery] GetAllOptions options)
+  public virtual async Task<ActionResult<GetAllResponse<TReadDTO>>> GetAllAsync([FromQuery] GetAllOptions options)
   {
     var result = await _service.GetAllAsync(options);
 

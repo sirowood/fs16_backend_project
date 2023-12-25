@@ -27,7 +27,7 @@ public class UserController : BaseController<User, UserReadDTO, UserCreateDTO, U
 
   [Authorize(Roles = "Admin")]
   [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-  public override async Task<ActionResult<IEnumerable<UserReadDTO>>> GetAllAsync([FromQuery] GetAllOptions options)
+  public override async Task<ActionResult<GetAllResponse<UserReadDTO>>> GetAllAsync([FromQuery] GetAllOptions options)
   {
     return await base.GetAllAsync(options);
   }
