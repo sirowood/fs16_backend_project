@@ -2,33 +2,24 @@ using Moq;
 using AutoMapper;
 
 using Shopify.Core.src.Abstraction;
-using Shopify.Service.src.Service;
-using Shopify.Service.src.Shared;
 using Shopify.Core.src.Shared;
 using Shopify.Core.src.Entity;
+using Shopify.Service.src.Service;
+using Shopify.Service.src.Shared;
 using Shopify.Service.src.DTO;
+using Shopify.Test.Shared;
 
 namespace Shopify.Test.src;
 
 public class CategoryServiceTest
 {
-  private static IMapper GetMapper()
-  {
-    MapperConfiguration mappingConfig = new(m =>
-    {
-      m.AddProfile(new MapperProfile());
-    });
-
-    IMapper mapper = mappingConfig.CreateMapper();
-
-    return mapper;
-  }
+  private readonly IMapper _mapper = MapperHelper.GetMapper();
 
   [Fact]
   public async void GetAllAsync_ShouldInvokeRepoMethod()
   {
     var repoMock = new Mock<ICategoryRepo>();
-    var categoryService = new CategoryService(repoMock.Object, GetMapper());
+    var categoryService = new CategoryService(repoMock.Object, _mapper);
     var options = new GetAllOptions();
 
     await categoryService.GetAllAsync(options);
@@ -47,9 +38,9 @@ public class CategoryServiceTest
       .ReturnsAsync(true);
 
     repoMock.Setup(repo => repo.CreateOneAsync(It.IsAny<Category>()))
-      .ReturnsAsync(GetMapper().Map<CategoryCreateDTO, Category>(createDto));
+      .ReturnsAsync(_mapper.Map<CategoryCreateDTO, Category>(createDto));
 
-    var service = new CategoryService(repoMock.Object, GetMapper());
+    var service = new CategoryService(repoMock.Object, _mapper);
 
     // Act
     var result = await service.CreateOneAsync(createDto);
@@ -69,7 +60,7 @@ public class CategoryServiceTest
     repoMock.Setup(repo => repo.NameIsAvailable(It.IsAny<string>()))
         .ReturnsAsync(false);
 
-    var service = new CategoryService(repoMock.Object, GetMapper());
+    var service = new CategoryService(repoMock.Object, _mapper);
 
     // Act & Assert
     var exception = await Assert.ThrowsAsync<CustomException>(() => service.CreateOneAsync(createDto));
@@ -97,7 +88,7 @@ public class CategoryServiceTest
     repoMock.Setup(repo => repo.GetTotal(options))
         .ReturnsAsync(entities.Count);
 
-    var service = new CategoryService(repoMock.Object, GetMapper());
+    var service = new CategoryService(repoMock.Object, _mapper);
 
     // Act
     var result = await service.GetAllAsync(options);
@@ -144,7 +135,7 @@ public class CategoryServiceTest
     repoMock.Setup(repo => repo.UpdateOneAsync(It.IsAny<Category>()))
       .ReturnsAsync(updatedDto);
 
-    var service = new CategoryService(repoMock.Object, GetMapper());
+    var service = new CategoryService(repoMock.Object, _mapper);
 
     // Act
     var result = await service.UpdateOneAsync(categoryId, updateDto);
@@ -174,7 +165,7 @@ public class CategoryServiceTest
     repoMock.Setup(repo => repo.DeleteOneAsync(It.IsAny<Category>()))
         .ReturnsAsync(true);
 
-    var service = new CategoryService(repoMock.Object, GetMapper());
+    var service = new CategoryService(repoMock.Object, _mapper);
 
     // Act
     var result = await service.DeleteOneAsync(entityId);
@@ -194,7 +185,7 @@ public class CategoryServiceTest
     repoMock.Setup(repo => repo.GetByIdAsync(entityId))
       .ReturnsAsync((Category)null!);
 
-    var service = new CategoryService(repoMock.Object, GetMapper());
+    var service = new CategoryService(repoMock.Object, _mapper);
 
     // Act & Assert
     await Assert.ThrowsAsync<CustomException>(async () => await service.DeleteOneAsync(entityId));
