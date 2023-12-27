@@ -47,6 +47,8 @@ public class DatabaseContext : DbContext
 
       entity.HasIndex(e => e.Email)
       .IsUnique();
+
+      entity.HasData(SeedingData.GetUsers());
     });
 
     modelBuilder
@@ -54,10 +56,24 @@ public class DatabaseContext : DbContext
       .Property(e => e.Status)
       .HasColumnType("status");
 
-    modelBuilder
-      .Entity<Category>()
-      .HasIndex(e => e.Name)
-      .IsUnique();
+    modelBuilder.Entity<Category>(entity =>
+    {
+      entity
+        .HasIndex(e => e.Name)
+        .IsUnique();
+
+      entity.HasData(SeedingData.GetCategories());
+    });
+
+    modelBuilder.Entity<Product>(entity =>
+    {
+      entity.HasData(SeedingData.GetProducts());
+    });
+
+    modelBuilder.Entity<Image>(entity =>
+    {
+      entity.HasData(SeedingData.GetImages());
+    });
 
     modelBuilder
       .Entity<OrderDetail>()
