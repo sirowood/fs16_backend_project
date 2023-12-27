@@ -8,7 +8,7 @@ public class SeedingData
   private static readonly Category gameCategory = new()
   {
     Id = Guid.NewGuid(),
-    Image = $"https://picsum.photos/seed/{new Random()}/1024",
+    Image = $"https://picsum.photos/seed/{new Random().Next()}/1024",
     Name = "Game",
     CreatedAt = DateTime.UtcNow,
     UpdatedAt = DateTime.UtcNow
@@ -16,7 +16,7 @@ public class SeedingData
   private static readonly Category movieCategory = new()
   {
     Id = Guid.NewGuid(),
-    Image = $"https://picsum.photos/seed/{new Random()}/1024",
+    Image = $"https://picsum.photos/seed/{new Random().Next()}/1024",
     Name = "Movie",
     CreatedAt = DateTime.UtcNow,
     UpdatedAt = DateTime.UtcNow
@@ -324,7 +324,7 @@ public class SeedingData
           Email = "admin@mail.com",
           FirstName ="Admin",
           LastName="User",
-          Avatar = $"https://picsum.photos/seed/{new Random()}/1024",
+          Avatar = $"https://picsum.photos/seed/{new Random().Next()}/1024",
           Salt = salt,
           Password = hashedPassword,
           CreatedAt = DateTime.UtcNow,

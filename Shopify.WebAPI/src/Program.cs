@@ -1,4 +1,9 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.OpenApi.Models;
+using System.Text;
 
 using Shopify.Core.src.Abstraction;
 using Shopify.Service.src.Abstraction;
@@ -7,12 +12,8 @@ using Shopify.Service.src.Shared;
 using Shopify.WebAPI.src.Middleware;
 using Shopify.WebAPI.src.Database;
 using Shopify.WebAPI.src.Repository;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
 using Shopify.WebAPI.src.Service;
 using Shopify.WebAPI.src.Authorization;
-using Microsoft.AspNetCore.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,7 +23,10 @@ builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true
 builder.Services.AddControllersWithViews(options => { options.SuppressAsyncSuffixInActionNames = false; });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+    {
+      c.SwaggerDoc("v1", new OpenApiInfo { Title = "Shopify-Server-Xuefeng", Version = "v1" });
+    });
 
 builder.Services
   .AddScoped<ITokenService, TokenService>()
@@ -79,11 +83,13 @@ var app = builder.Build();
 app.UseMiddleware<ExceptionHandlerMiddleware>();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-  app.UseSwagger();
-  app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+  {
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "V1");
+    c.RoutePrefix = string.Empty;
+  }
+);
 
 app.UseHttpsRedirection();
 
