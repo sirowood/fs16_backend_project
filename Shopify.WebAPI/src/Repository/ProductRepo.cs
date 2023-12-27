@@ -28,7 +28,7 @@ public class ProductRepo : BaseRepo<Product>, IProductRepo
     return createObject;
   }
 
-  private static IQueryable<Product> ApplyOrder(IQueryable<Product> query, string? orderBy = "Id", string? direction = "Asc")
+  private static IQueryable<Product> ApplyOrder(IQueryable<Product> query, string? orderBy = "CreatedAt", string? direction = "Asc")
   {
     return orderBy?.ToLower() switch
     {
@@ -56,7 +56,7 @@ public class ProductRepo : BaseRepo<Product>, IProductRepo
 
     if (!options.Title.IsNullOrEmpty())
     {
-      query = query.Where(entity => entity.Title.Contains(options.Title!));
+      query = query.Where(entity => EF.Functions.ILike(entity.Title, $"%{options.Title}%"));
     }
 
     if (!options.OrderBy.IsNullOrEmpty())
@@ -76,7 +76,7 @@ public class ProductRepo : BaseRepo<Product>, IProductRepo
   {
     return await _data
       .Where(entity => !options.CategoryId.HasValue || entity.CategoryId == options.CategoryId)
-      .Where(entity => string.IsNullOrEmpty(options.Title) || entity.Title.Contains(options.Title))
+      .Where(entity => string.IsNullOrEmpty(options.Title) || EF.Functions.ILike(entity.Title, $"%{options.Title}%"))
       .CountAsync();
   }
 

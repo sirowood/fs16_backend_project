@@ -25,8 +25,9 @@ public class DatabaseContext : DbContext
     var connectionString = _config.GetConnectionString("DB_URL");
 
     var dataSourceBuilder = new NpgsqlDataSourceBuilder(connectionString);
-    dataSourceBuilder.MapEnum<Role>();
-    dataSourceBuilder.MapEnum<Status>();
+    dataSourceBuilder
+      .MapEnum<Role>()
+      .MapEnum<Status>();
     var dataSource = dataSourceBuilder.Build();
 
     optionsBuilder

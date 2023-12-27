@@ -36,6 +36,7 @@ public class BaseRepo<T> : IBaseRepo<T> where T : BaseEntity
   public virtual async Task<IEnumerable<T>> GetAllAsync(GetAllOptions options)
   {
     var entities = await _data
+      .AsNoTracking()
       .OrderBy(entity => entity.Id)
       .Skip(options.Offset)
       .Take(options.Limit)
@@ -46,7 +47,7 @@ public class BaseRepo<T> : IBaseRepo<T> where T : BaseEntity
 
   public virtual async Task<int> GetTotal(GetAllOptions options)
   {
-    var total = await _data.CountAsync();
+    var total = await _data.AsNoTracking().CountAsync();
 
     return total;
   }

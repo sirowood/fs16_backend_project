@@ -52,7 +52,10 @@ builder.Services.AddTransient<ExceptionHandlerMiddleware>();
 
 builder.Services.AddAutoMapper(typeof(MapperProfile).Assembly);
 
-builder.Services.AddDbContext<DatabaseContext>(options => options.UseNpgsql());
+builder.Services.AddDbContext<DatabaseContext>(
+  options => options.UseNpgsql(),
+  ServiceLifetime.Singleton
+);
 
 builder
   .Services

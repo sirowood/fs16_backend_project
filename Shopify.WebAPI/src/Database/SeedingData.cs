@@ -234,8 +234,8 @@ public class SeedingData
   private static readonly Product product20 = new()
   {
     Id = Guid.NewGuid(),
-    Title = "Diablo",
-    Description = "An atmospheric action RPG released in 1996 where players descend into the depths of hell, battling demonic forces and uncovering dark secrets",
+    Title = "Civilization II",
+    Description = "Lead your civilization from the ancient era to the space age, navigating diplomacy, warfare, and technological advancements to build a thriving empire.",
     Price = 19.9m,
     CategoryId = gameCategory.Id,
     CreatedAt = DateTime.UtcNow,
