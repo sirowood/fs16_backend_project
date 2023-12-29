@@ -64,4 +64,12 @@ public class AuthService : IAuthService
     await _repo.CreateOneAsync(user);
     return true;
   }
+
+  public async Task<UserReadDTO> GetProfileAsync(Guid userId)
+  {
+    var user = await _repo.GetByIdAsync(userId)
+      ?? throw CustomException.LoginFailed();
+
+    return _mapper.Map<User, UserReadDTO>(user);
+  }
 }

@@ -28,14 +28,14 @@ public class ProductRepo : BaseRepo<Product>, IProductRepo
     return createObject;
   }
 
-  private static IQueryable<Product> ApplyOrder(IQueryable<Product> query, string? orderBy = "CreatedAt", string? direction = "Asc")
+  private static IQueryable<Product> ApplyOrder(IQueryable<Product> query, string? orderBy = "CreatedAt", string? direction = "Desc")
   {
     return orderBy?.ToLower() switch
     {
-      "title" => direction == "desc"
+      "title" => direction == "Desc"
         ? query.OrderByDescending(entity => entity.Title)
         : query.OrderBy(entity => entity.Title),
-      "price" => direction == "desc"
+      "price" => direction == "Desc"
         ? query.OrderByDescending(entity => entity.Price)
         : query.OrderBy(entity => entity.Price),
       _ => query,
@@ -65,9 +65,9 @@ public class ProductRepo : BaseRepo<Product>, IProductRepo
     }
 
     var result = await query
-        .Skip(options.Offset)
-        .Take(options.Limit)
-        .ToArrayAsync();
+      .Skip(options.Offset)
+      .Take(options.Limit)
+      .ToArrayAsync();
 
     return result;
   }

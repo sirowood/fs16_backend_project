@@ -22,18 +22,6 @@ public class DatabaseContext : DbContext
 
   protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
   {
-    var connectionString = _config.GetConnectionString("DB_URL");
-
-    var dataSourceBuilder = new NpgsqlDataSourceBuilder(connectionString);
-    dataSourceBuilder
-      .MapEnum<Role>()
-      .MapEnum<Status>();
-    var dataSource = dataSourceBuilder.Build();
-
-    optionsBuilder
-      .UseNpgsql(dataSource)
-      .UseSnakeCaseNamingConvention();
-
     base.OnConfiguring(optionsBuilder);
   }
 

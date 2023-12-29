@@ -7,4 +7,5 @@ public interface IAuthService
 {
   Task<string> LoginAsync(Credentials credentials);
   Task<bool> RegisterAsync(UserRegisterDTO createDTO);
+  Task<UserReadDTO> GetProfileAsync(Guid userId);
 }

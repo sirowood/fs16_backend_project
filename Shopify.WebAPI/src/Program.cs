@@ -14,8 +14,23 @@ using Shopify.WebAPI.src.Database;
 using Shopify.WebAPI.src.Repository;
 using Shopify.WebAPI.src.Service;
 using Shopify.WebAPI.src.Authorization;
+using Npgsql;
+using Shopify.Core.src.Entity;
 
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddCors(options =>
+{
+  options.AddPolicy(
+    name: MyAllowSpecificOrigins,
+    policy =>
+    {
+      policy
+        .AllowAnyOrigin()
+        .AllowAnyHeader()
+        .AllowAnyMethod();
+    });
+});
 
 // Add services to the container.
 
@@ -52,9 +67,16 @@ builder.Services.AddTransient<ExceptionHandlerMiddleware>();
 
 builder.Services.AddAutoMapper(typeof(MapperProfile).Assembly);
 
+var connectionString = builder.Configuration.GetConnectionString("DB_URL");
+
+var dataSourceBuilder = new NpgsqlDataSourceBuilder(connectionString);
+dataSourceBuilder
+  .MapEnum<Role>()
+  .MapEnum<Status>();
+var dataSource = dataSourceBuilder.Build();
+
 builder.Services.AddDbContext<DatabaseContext>(
-  options => options.UseNpgsql(),
-  ServiceLifetime.Singleton
+  options => options.UseNpgsql(dataSource).UseSnakeCaseNamingConvention()
 );
 
 builder
@@ -95,6 +117,8 @@ app.UseSwaggerUI(c =>
 );
 
 app.UseHttpsRedirection();
+
+app.UseCors(MyAllowSpecificOrigins);
 
 app.UseAuthentication();
 

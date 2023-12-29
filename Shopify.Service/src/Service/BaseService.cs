@@ -46,7 +46,9 @@ where T : BaseEntity
 
     var total = await _repo.GetTotal(options);
 
-    var result = new GetAllResponse<TReadDTO> { Items = readEntities, Total = total };
+    var pages = (int)Math.Ceiling((double)total / options.Limit);
+
+    var result = new GetAllResponse<TReadDTO> { Items = readEntities, Total = total, Pages = pages };
 
     return result;
   }
