@@ -15,6 +15,4 @@ public class ImageCreateDTO
 
 public class ImageUpdateDTO
 {
-  public required Guid ProductId { get; set; }
-  public required string URL { get; set; }
 }

@@ -11,9 +11,12 @@ namespace Shopify.Service.src.Service;
 public class ProductService : BaseService<Product, ProductReadDTO, ProductCreateDTO, ProductUpdateDTO>, IProductService
 {
   private readonly ICategoryRepo _categoryRepo;
-  public ProductService(IProductRepo repo, ICategoryRepo categoryRepo, IMapper mapper) : base(repo, mapper)
+  private readonly IImageRepo _imageRepo;
+
+  public ProductService(IProductRepo repo, ICategoryRepo categoryRepo, IImageRepo imageRepo, IMapper mapper) : base(repo, mapper)
   {
     _categoryRepo = categoryRepo;
+    _imageRepo = imageRepo;
   }
 
   private async Task VerifyCategory(Guid categoryId)
@@ -31,6 +34,9 @@ public class ProductService : BaseService<Product, ProductReadDTO, ProductCreate
   public override async Task<ProductReadDTO> UpdateOneAsync(Guid id, ProductUpdateDTO updateDTO)
   {
     await VerifyCategory(updateDTO.CategoryId);
+
+    await _imageRepo.RemoveImagesByProductId(id);
+
     return await base.UpdateOneAsync(id, updateDTO);
   }
 }

@@ -90,7 +90,6 @@ This project is developed following clean architecture. It ensures system is mor
 
 - CRUD category
 - CRUD product
-- CRUD images
 - Create user as customer/admin
 - Get all users info
 - Delete user

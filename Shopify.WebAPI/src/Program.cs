@@ -33,9 +33,9 @@ builder.Services.AddCors(options =>
 });
 
 // Add services to the container.
-
 builder.Services.Configure<RouteOptions>(options => options.LowercaseUrls = true);
 builder.Services.AddControllersWithViews(options => { options.SuppressAsyncSuffixInActionNames = false; });
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -54,7 +54,6 @@ builder.Services
   .AddScoped<ICategoryRepo, CategoryRepo>()
   .AddScoped<IProductService, ProductService>()
   .AddScoped<IProductRepo, ProductRepo>()
-  .AddScoped<IImageService, ImageService>()
   .AddScoped<IImageRepo, ImageRepo>()
   .AddScoped<IOrderService, OrderService>()
   .AddScoped<IOrderRepo, OrderRepo>();

@@ -25,4 +25,5 @@ public class ProductUpdateDTO
   public required string Description { get; set; }
   public required decimal Price { get; set; }
   public required Guid CategoryId { get; set; }
+  public required IEnumerable<ImageCreateDTO> Images { get; set; }
 }

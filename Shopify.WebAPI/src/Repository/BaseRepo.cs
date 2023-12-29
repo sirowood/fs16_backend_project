@@ -59,7 +59,7 @@ public class BaseRepo<T> : IBaseRepo<T> where T : BaseEntity
     return result;
   }
 
-  public async Task<T> UpdateOneAsync(T updatedEntity)
+  public async virtual Task<T> UpdateOneAsync(T updatedEntity)
   {
     _data.Update(updatedEntity);
     await _databaseContext.SaveChangesAsync();

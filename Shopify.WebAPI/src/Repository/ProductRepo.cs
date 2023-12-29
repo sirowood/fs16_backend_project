@@ -89,4 +89,9 @@ public class ProductRepo : BaseRepo<Product>, IProductRepo
 
     return result;
   }
+
+  public override Task<Product> UpdateOneAsync(Product updatedEntity)
+  {
+    return base.UpdateOneAsync(updatedEntity);
+  }
 }
