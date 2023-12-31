@@ -16,6 +16,8 @@ public class OrderRepo : BaseRepo<Order>, IOrderRepo
   public override async Task<Order?> GetByIdAsync(Guid id)
   {
     return await _data
+      .Include(e => e.User)
+      .Include(e => e.Address)
       .Include(e => e.OrderDetails)
         .ThenInclude(e => e.Product.Images)
       .FirstOrDefaultAsync(e => e.Id == id);
@@ -26,9 +28,12 @@ public class OrderRepo : BaseRepo<Order>, IOrderRepo
     var result = await _data
       .Include(u => u.OrderDetails)
         .ThenInclude(e => e.Product.Images)
+      .Include(e => e.User)
+      .Include(e => e.Address)
       .OrderBy(entity => entity.Id)
       .Skip(options.Offset)
       .Take(options.Limit)
+      .AsSplitQuery()
       .ToArrayAsync();
 
     return result;

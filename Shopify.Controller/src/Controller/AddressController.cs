@@ -34,7 +34,9 @@ public class AddressController : BaseController<Address, AddressReadDTO, Address
     var userIdClaim = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier);
     var userId = Guid.Parse(userIdClaim!.Value);
 
-    if (userId != updateDTO.UserId)
+    var targetAddress = await _service.GetByIdAsync(id);
+
+    if (userId != targetAddress.UserId)
     {
       throw CustomException.NotAllowed();
     }
@@ -44,6 +46,7 @@ public class AddressController : BaseController<Address, AddressReadDTO, Address
     return Ok(result);
   }
 
+  [Authorize(Roles = "Customer")]
   public override async Task<ActionResult<bool>> DeleteOneAsync([FromRoute] Guid id)
   {
     var userIdClaim = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier);
@@ -65,7 +68,7 @@ public class AddressController : BaseController<Address, AddressReadDTO, Address
     return await base.GetAllAsync(options);
   }
 
-  [Authorize]
+  [NonAction]
   public override async Task<ActionResult<AddressReadDTO>> GetByIdAsync([FromRoute] Guid id)
   {
     var userIdClaim = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier);

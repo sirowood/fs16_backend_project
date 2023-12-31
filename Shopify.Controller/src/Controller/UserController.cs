@@ -68,9 +68,7 @@ public class UserController : BaseController<User, UserReadDTO, UserCreateDTO, U
     var userIdClaim = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier);
     var userId = Guid.Parse(userIdClaim!.Value);
 
-    var result = await base.UpdateOneAsync(userId, updateDTO);
-
-    return Ok(result);
+    return await base.UpdateOneAsync(userId, updateDTO);
   }
 
   [Authorize]
@@ -80,9 +78,7 @@ public class UserController : BaseController<User, UserReadDTO, UserCreateDTO, U
     var userIdClaim = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier);
     var userId = Guid.Parse(userIdClaim!.Value);
 
-    var result = await base.DeleteOneAsync(userId);
-
-    return Ok(result);
+    return await base.DeleteOneAsync(userId);
   }
 
   [Authorize(Roles = "Admin")]
