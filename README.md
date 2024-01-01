@@ -6,6 +6,8 @@
 
 This is the server side repository for the Fullstack Project of Integrify Academy Fullstack Program 2023 - August.
 
+[Backend URL](https://xuefeng-shopify-server.azurewebsites.net/index.html)
+
 The corresponding frontend is [Here](https://xuefeng-frontend-project.vercel.app)
 
 ## Table of Contents
