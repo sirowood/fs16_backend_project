@@ -314,7 +314,8 @@ public class SeedingData
 
   public static List<User> GetUsers()
   {
-    PasswordService.HashPassword("admin", out string salt, out string hashedPassword);
+    PasswordService.HashPassword("admin123", out string adminSalt, out string adminHashedPassword);
+    PasswordService.HashPassword("changeme", out string customerSalt, out string customerHashedPassword);
     return new List<User>
     {
       new()
@@ -325,8 +326,22 @@ public class SeedingData
           FirstName ="Admin",
           LastName="User",
           Avatar = $"https://picsum.photos/seed/{new Random().Next()}/1024",
-          Salt = salt,
-          Password = hashedPassword,
+          Salt = adminSalt,
+          Password = adminHashedPassword,
+          CreatedAt = DateTime.UtcNow,
+          UpdatedAt = DateTime.UtcNow,
+        },
+
+      new()
+        {
+          Id = Guid.NewGuid(),
+          Role = Role.Customer,
+          Email = "john@mail.com",
+          FirstName ="John",
+          LastName="Smith",
+          Avatar = $"https://picsum.photos/seed/{new Random().Next()}/1024",
+          Salt = customerSalt,
+          Password = customerHashedPassword,
           CreatedAt = DateTime.UtcNow,
           UpdatedAt = DateTime.UtcNow,
         }

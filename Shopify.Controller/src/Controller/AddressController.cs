@@ -13,8 +13,10 @@ namespace Shopify.Controller.src.Controller;
 [Route("api/v1/[controller]es")]
 public class AddressController : BaseController<Address, AddressReadDTO, AddressCreateDTO, AddressUpdateDTO>
 {
-  public AddressController(IAddressService service) : base(service)
+  private readonly IAuthorizationService _authorizationService;
+  public AddressController(IAddressService service, IAuthorizationService authorizationService) : base(service)
   {
+    _authorizationService = authorizationService;
   }
 
   [Authorize(Roles = "Customer")]
@@ -31,14 +33,15 @@ public class AddressController : BaseController<Address, AddressReadDTO, Address
   [Authorize(Roles = "Customer")]
   public override async Task<ActionResult<AddressReadDTO>> UpdateOneAsync([FromRoute] Guid id, [FromBody] AddressUpdateDTO updateDTO)
   {
-    var userIdClaim = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier);
-    var userId = Guid.Parse(userIdClaim!.Value);
+    var address = await _service.GetByIdAsync(id)
+      ?? throw CustomException.NotFound("Address not found.");
 
-    var targetAddress = await _service.GetByIdAsync(id);
+    var authorizationResult = await _authorizationService
+      .AuthorizeAsync(User, address, "AddressOwner");
 
-    if (userId != targetAddress.UserId)
+    if (!authorizationResult.Succeeded)
     {
-      throw CustomException.NotAllowed();
+      throw CustomException.NotAllowed("You're not the address owner.");
     }
 
     var result = await _service.UpdateOneAsync(id, updateDTO);
@@ -49,14 +52,15 @@ public class AddressController : BaseController<Address, AddressReadDTO, Address
   [Authorize(Roles = "Customer")]
   public override async Task<ActionResult<bool>> DeleteOneAsync([FromRoute] Guid id)
   {
-    var userIdClaim = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier);
-    var userId = Guid.Parse(userIdClaim!.Value);
+    var address = await _service.GetByIdAsync(id)
+      ?? throw CustomException.NotFound("Address not found.");
 
-    var addressEntity = await _service.GetByIdAsync(id);
+    var authorizationResult = await _authorizationService
+      .AuthorizeAsync(User, address, "AddressOwner");
 
-    if (userId != addressEntity.UserId)
+    if (!authorizationResult.Succeeded)
     {
-      throw CustomException.NotAllowed();
+      throw CustomException.NotAllowed("You're not the address owner.");
     }
 
     return await base.DeleteOneAsync(id);
@@ -71,16 +75,6 @@ public class AddressController : BaseController<Address, AddressReadDTO, Address
   [NonAction]
   public override async Task<ActionResult<AddressReadDTO>> GetByIdAsync([FromRoute] Guid id)
   {
-    var userIdClaim = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier);
-    var userId = Guid.Parse(userIdClaim!.Value);
-
-    var addressEntity = await _service.GetByIdAsync(id);
-
-    if (addressEntity.UserId != userId)
-    {
-      throw CustomException.NotAllowed();
-    }
-
-    return addressEntity;
+    return await _service.GetByIdAsync(id);
   }
 }

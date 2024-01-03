@@ -40,12 +40,14 @@ public class ProductServiceTest
       .Setup(repo => repo.GetByIdAsync(createDto.CategoryId))
       .ReturnsAsync(category);
 
+    var imageRepoMock = new Mock<IImageRepo>();
+
     var repoMock = new Mock<IProductRepo>();
     repoMock
     .Setup(repo => repo.CreateOneAsync(It.IsAny<Product>()))
       .ReturnsAsync(product);
 
-    var productService = new ProductService(repoMock.Object, categoryRepoMock.Object, _mapper);
+    var productService = new ProductService(repoMock.Object, categoryRepoMock.Object, imageRepoMock.Object, _mapper);
 
     // Act
     var result = await productService.CreateOneAsync(createDto);
@@ -75,9 +77,11 @@ public class ProductServiceTest
       .Setup(repo => repo.GetByIdAsync(createDto.CategoryId))
       .ReturnsAsync((Category?)null);
 
+    var imageRepoMock = new Mock<IImageRepo>();
+
     var repoMock = new Mock<IProductRepo>();
 
-    var productService = new ProductService(repoMock.Object, categoryRepoMock.Object, _mapper);
+    var productService = new ProductService(repoMock.Object, categoryRepoMock.Object, imageRepoMock.Object, _mapper);
 
     // Act & Assert
     await Assert.ThrowsAsync<CustomException>(async () => await productService.CreateOneAsync(createDto));
@@ -106,6 +110,7 @@ public class ProductServiceTest
       Description = "description",
       Price = 19.9m,
       CategoryId = categoryId,
+      Images = new List<ImageCreateDTO>(),
     };
 
     var product = _mapper.Map<ProductUpdateDTO, Product>(updateDto);
@@ -115,6 +120,8 @@ public class ProductServiceTest
       .Setup(repo => repo.GetByIdAsync(updateDto.CategoryId))
       .ReturnsAsync(category);
 
+    var imageRepoMock = new Mock<IImageRepo>();
+
     var repoMock = new Mock<IProductRepo>();
     repoMock
       .Setup(repo => repo.UpdateOneAsync(It.IsAny<Product>()))
@@ -123,7 +130,7 @@ public class ProductServiceTest
       .Setup(repo => repo.GetByIdAsync(It.IsAny<Guid>()))
       .ReturnsAsync(product);
 
-    var productService = new ProductService(repoMock.Object, categoryRepoMock.Object, _mapper);
+    var productService = new ProductService(repoMock.Object, categoryRepoMock.Object, imageRepoMock.Object, _mapper);
 
     // Act
     var result = await productService.UpdateOneAsync(productId, updateDto);
@@ -147,15 +154,18 @@ public class ProductServiceTest
       Description = "description",
       Price = 19.9m,
       CategoryId = Guid.NewGuid(),
+      Images = new List<ImageCreateDTO>(),
     };
 
     var categoryRepoMock = new Mock<ICategoryRepo>();
     categoryRepoMock.Setup(repo => repo.GetByIdAsync(updateDto.CategoryId))
         .ReturnsAsync((Category?)null);
 
+    var imageRepoMock = new Mock<IImageRepo>();
+
     var repoMock = new Mock<IProductRepo>();
 
-    var productService = new ProductService(repoMock.Object, categoryRepoMock.Object, _mapper);
+    var productService = new ProductService(repoMock.Object, categoryRepoMock.Object, imageRepoMock.Object, _mapper);
 
     // Act & Assert
     await Assert.ThrowsAsync<CustomException>(async () => await productService.UpdateOneAsync(productId, updateDto));

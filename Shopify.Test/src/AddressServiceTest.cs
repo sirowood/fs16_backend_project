@@ -59,7 +59,6 @@ public class AddressServiceTest
       Street = "Updated St",
       City = "Updated City",
       Country = "Updated Country",
-      UserId = userId
     };
 
     var address = new Address

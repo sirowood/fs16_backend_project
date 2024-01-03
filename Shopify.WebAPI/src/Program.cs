@@ -60,7 +60,8 @@ builder.Services
 
 builder.Services
   .AddSingleton<IAuthorizationHandler, OrderOwnerHandler>()
-  .AddSingleton<IAuthorizationHandler, OrderOwnerOrAdminHandler>();
+  .AddSingleton<IAuthorizationHandler, OrderOwnerOrAdminHandler>()
+  .AddSingleton<IAuthorizationHandler, AddressOwnerHandler>();
 
 builder.Services.AddTransient<ExceptionHandlerMiddleware>();
 
@@ -100,6 +101,7 @@ builder.Services.AddAuthorization(policy =>
 {
   policy.AddPolicy("OrderOwner", policy => policy.Requirements.Add(new OrderOwnerRequirement()));
   policy.AddPolicy("OrderOwnerOrAdmin", policy => policy.Requirements.Add(new OrderOwnerOrAdminRequirement()));
+  policy.AddPolicy("AddressOwner", policy => policy.Requirements.Add(new AddressOwnerRequirement()));
 });
 
 var app = builder.Build();
