@@ -20,6 +20,7 @@ public class OrderRepo : BaseRepo<Order>, IOrderRepo
       .Include(e => e.Address)
       .Include(e => e.OrderDetails)
         .ThenInclude(e => e.Product.Images)
+      .AsSplitQuery()
       .FirstOrDefaultAsync(e => e.Id == id);
   }
 

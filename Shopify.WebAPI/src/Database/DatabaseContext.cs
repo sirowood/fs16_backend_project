@@ -1,12 +1,11 @@
 using Microsoft.EntityFrameworkCore;
-using Npgsql;
+
 using Shopify.Core.src.Entity;
 
 namespace Shopify.WebAPI.src.Database;
 
 public class DatabaseContext : DbContext
 {
-  private readonly IConfiguration _config;
   public DbSet<User> Users { get; set; }
   public DbSet<Address> Addresses { get; set; }
   public DbSet<Category> Categories { get; set; }
@@ -15,9 +14,8 @@ public class DatabaseContext : DbContext
   public DbSet<Order> Orders { get; set; }
   public DbSet<OrderDetail> OrderDetails { get; set; }
 
-  public DatabaseContext(DbContextOptions options, IConfiguration config) : base(options)
+  public DatabaseContext(DbContextOptions options) : base(options)
   {
-    _config = config;
   }
 
   protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

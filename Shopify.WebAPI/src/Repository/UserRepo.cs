@@ -30,6 +30,7 @@ public class UserRepo : BaseRepo<User>, IUserRepo
   {
     var result = await _data
       .Include(e => e.Addresses)
+      .AsSplitQuery()
       .FirstOrDefaultAsync(e => e.Id == id);
 
     return result;
