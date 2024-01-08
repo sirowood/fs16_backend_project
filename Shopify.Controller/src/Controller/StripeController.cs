@@ -25,7 +25,6 @@ public class WebhookController : ControllerBase
   [HttpPost]
   public async Task<IActionResult> IndexAsync()
   {
-    Console.WriteLine(_configuration["Stripe:EndpointSecret"]);
     try
     {
       var json = await new StreamReader(HttpContext.Request.Body)
